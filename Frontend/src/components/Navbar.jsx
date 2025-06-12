@@ -13,22 +13,25 @@ const Navbar = () => {
   };
 
   return (
-    <div className="bg-primary text-secondary flex items-center justify-between py-4 px-6 border-b border-gray-300 relative">
+    <div className="bg-white text-secondary flex items-center justify-between py-4 px-6 border-b border-gray-300 relative">
       
-      {/* Logo */}
-      <h1 className="font-bold text-lg cursor-pointer" onClick={() => navigate('/')}>
-        TWOD
-      </h1>
+      {/* Logo - Larger */}
+      <img
+        src="https://i0.wp.com/thewallofdreams.com/wp-content/uploads/2025/03/logo_twod-removebg-preview.png?w=846&ssl=1"
+        alt="TWOD Logo"
+        className="w-32 sm:w-40 cursor-pointer "
+        onClick={() => navigate('/')}
+      />
 
-      {/* Desktop Nav */}
+      
       <ul className="hidden md:flex items-center gap-6 text-sm font-medium">
-        <NavLink to="/" className="hover:text-white">HOME</NavLink>
-        <NavLink to="/project" className="hover:text-white">PROJECT</NavLink>
-        <NavLink to="/team" className="hover:text-white">TEAM</NavLink>
-        <NavLink to="/contact" className="hover:text-white">CONTACT US</NavLink>
+        <NavLink to="/" className="hover:text-primary">HOME</NavLink>
+        <NavLink to="/aboutus" className="hover:text-primary">ABOUT US</NavLink>
+        <NavLink to="/services" className="hover:text-primary">SERVICES</NavLink>
+        <NavLink to="/contact" className="hover:text-primary">CONTACT US</NavLink>
       </ul>
 
-      {/* Desktop Profile or Login */}
+      
       <div className="relative hidden md:block">
         {isLoggedIn ? (
           <div
@@ -64,7 +67,7 @@ const Navbar = () => {
         ) : (
           <button
             onClick={() => navigate('/login')}
-            className="bg-white text-primary px-6 py-2 rounded-full font-semibold text-sm hover:bg-opacity-80"
+            className="bg-secondary text-primary px-6 py-2 rounded-full font-semibold text-sm hover:bg-opacity-80"
           >
             CREATE ACCOUNT
           </button>
@@ -86,7 +89,11 @@ const Navbar = () => {
       {showMobileMenu && (
         <div className="fixed inset-0 z-30 bg-white text-black px-6 py-4 md:hidden">
           <div className="flex justify-between items-center mb-6">
-            <h1 className="text-xl font-bold text-primary">TWOD</h1>
+            <img
+              src="https://i0.wp.com/thewallofdreams.com/wp-content/uploads/2025/03/logo_twod-removebg-preview.png?w=846&ssl=1"
+              alt="TWOD Logo"
+              className="w-32"
+            />
             <button onClick={() => setShowMobileMenu(false)}>
               <img
                 src="https://img.icons8.com/ios-filled/24/delete-sign.png"
@@ -97,8 +104,8 @@ const Navbar = () => {
           </div>
           <ul className="flex flex-col gap-4 text-base font-medium">
             <NavLink onClick={() => setShowMobileMenu(false)} to="/">HOME</NavLink>
-            <NavLink onClick={() => setShowMobileMenu(false)} to="/project">PROJECT</NavLink>
-            <NavLink onClick={() => setShowMobileMenu(false)} to="/team">TEAM</NavLink>
+            <NavLink onClick={() => setShowMobileMenu(false)} to="/aboutus">ABOUT US</NavLink>
+            <NavLink onClick={() => setShowMobileMenu(false)} to="/services">SERVICES</NavLink>
             <NavLink onClick={() => setShowMobileMenu(false)} to="/contact">CONTACT US</NavLink>
             {isLoggedIn ? (
               <>
