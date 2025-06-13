@@ -47,10 +47,10 @@ const Contact = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-100 via-white to-primary p-6 md:p-16">
+    <div className="min-h-screen bg-gradient-to-br from-white via-white  p-6 md:p-16">
       <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 bg-white rounded-2xl shadow-2xl overflow-hidden">
         
-        {/* Contact Form */}
+        
         <div className="p-8 space-y-6">
           <h2 className="text-3xl font-bold text-primary">Contact Us</h2>
           <p className="text-gray-600">We'd love to hear from you. Fill out the form and we’ll get back to you shortly.</p>
