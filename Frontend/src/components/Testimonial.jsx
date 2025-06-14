@@ -1,11 +1,17 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { Icon } from "@iconify/react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const Testimonial = () => {
-  
+  const sectionRef = useRef(null);
+  const cardsRef = useRef([]);
+
   const testimonialData = [
     {
       name: "Jane Doe",
@@ -36,6 +42,23 @@ const Testimonial = () => {
       rating: 5,
     },
   ];
+
+  useEffect(() => {
+    if (sectionRef.current) {
+      gsap.from(cardsRef.current, {
+        opacity: 0,
+        y: 50,
+        duration: 0.8,
+        stagger: 0.3,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 80%",
+          toggleActions: "play none none none",
+        },
+      });
+    }
+  }, []);
 
   const settings = {
     dots: true,
@@ -98,7 +121,7 @@ const Testimonial = () => {
   };
 
   return (
-    <section id="testimonial" className="py-16 bg-gray-50">
+    <section id="testimonial" className="py-16 bg-gray-50" ref={sectionRef}>
       <div className="container mx-auto max-w-screen-xl px-4">
         <h2 className="text-3xl font-bold text-center mb-10 text-gray-800">
           What Our Clients Say
@@ -107,6 +130,7 @@ const Testimonial = () => {
           {testimonialData.map((item, index) => (
             <div key={index}>
               <div
+                ref={(el) => (cardsRef.current[index] = el)}
                 className={`bg-white rounded-2xl m-4 p-6 my-10 relative ${
                   index % 2 ? "shadow-lg" : "shadow-md"
                 }`}
