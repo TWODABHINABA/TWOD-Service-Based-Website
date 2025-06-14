@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon } from '@iconify/react'; // Optional: You can remove if not using icons
+import { Icon } from '@iconify/react'; 
 
 const About = () => {
   return (

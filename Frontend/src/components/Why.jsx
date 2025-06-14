@@ -1,8 +1,44 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const Why = () => {
+  const sectionRef = useRef(null);
+  const cardsRef = useRef([]);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+
+    gsap.from(section, {
+      opacity: 0,
+      y: 50,
+      duration: 1,
+      ease: 'power2.out',
+      scrollTrigger: {
+        trigger: section,
+        start: 'top 80%',
+        toggleActions: 'play none none none',
+      },
+    });
+
+    gsap.from(cardsRef.current, {
+      opacity: 0,
+      y: 40,
+      duration: 0.6,
+      stagger: 0.2,
+      ease: 'power2.out',
+      scrollTrigger: {
+        trigger: section,
+        start: 'top 80%',
+        toggleActions: 'play none none none',
+      },
+    });
+  }, []);
+
   return (
-    <div className="bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div ref={sectionRef} className="bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto text-center">
         <h1 className="text-4xl font-extrabold text-gray-900 mb-4">
           Why Choose Our TWOD Services
@@ -12,32 +48,33 @@ const Why = () => {
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          
-          <div className="bg-white shadow-md rounded-lg p-6">
-            <div className="text-4xl mb-4">⚡</div>
-            <h3 className="text-xl font-semibold mb-2">Fast & Optimized</h3>
-            <p className="text-gray-600">
-              We build lightning-fast websites with optimized code and best practices for SEO and performance.
-            </p>
-          </div>
-
-          
-          <div className="bg-white shadow-md rounded-lg p-6">
-            <div className="text-4xl mb-4">🎨</div>
-            <h3 className="text-xl font-semibold mb-2">Custom Design</h3>
-            <p className="text-gray-600">
-              Each website is tailored to reflect your brand identity with unique and engaging design.
-            </p>
-          </div>
-
-          
-          <div className="bg-white shadow-md rounded-lg p-6">
-            <div className="text-4xl mb-4">🤝</div>
-            <h3 className="text-xl font-semibold mb-2">Client-Centric Approach</h3>
-            <p className="text-gray-600">
-              We work closely with clients at every step, ensuring satisfaction and transparency throughout the project.
-            </p>
-          </div>
+          {[
+            {
+              icon: '⚡',
+              title: 'Fast & Optimized',
+              desc: 'We build lightning-fast websites with optimized code and best practices for SEO and performance.',
+            },
+            {
+              icon: '🎨',
+              title: 'Custom Design',
+              desc: 'Each website is tailored to reflect your brand identity with unique and engaging design.',
+            },
+            {
+              icon: '🤝',
+              title: 'Client-Centric Approach',
+              desc: 'We work closely with clients at every step, ensuring satisfaction and transparency throughout the project.',
+            },
+          ].map((card, index) => (
+            <div
+              key={index}
+              ref={(el) => (cardsRef.current[index] = el)}
+              className="bg-white shadow-md rounded-lg p-6"
+            >
+              <div className="text-4xl mb-4">{card.icon}</div>
+              <h3 className="text-xl font-semibold mb-2">{card.title}</h3>
+              <p className="text-gray-600">{card.desc}</p>
+            </div>
+          ))}
         </div>
       </div>
     </div>

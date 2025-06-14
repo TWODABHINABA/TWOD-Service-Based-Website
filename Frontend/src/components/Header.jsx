@@ -1,21 +1,33 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
 
 const HeroSection = () => {
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    gsap.fromTo(
+      sectionRef.current,
+      { opacity: 0, y: 50 },
+      { opacity: 1, y: 0, duration: 1.2, ease: 'power2.out' }
+    );
+  }, []);
+
   return (
-    <section className="bg-white ">
-      <div className="grid max-w-screen-xl px-4 py-16 mx-auto lg:gap-8 xl:gap-0 lg:py-28 lg:grid-cols-12">
-       
+    <section className="bg-white">
+      <div
+        ref={sectionRef}
+        className="grid max-w-screen-xl px-4 py-16 mx-auto lg:gap-8 xl:gap-0 lg:py-28 lg:grid-cols-12"
+      >
         <div className="mr-auto place-self-center lg:col-span-7">
           <h1 className="max-w-2xl mb-4 text-4xl font-extrabold tracking-tight leading-none md:text-5xl xl:text-6xl dark:text-primary">
             Building Website and Landing Page.
           </h1>
-         <p className="max-w-2xl mb-6 font-light text-gray-500 lg:mb-8 md:text-lg lg:text-xl dark:text-gray-400">
-  The walls of Dream provide service to make the websites. We specialize in crafting visually appealing, fast, and responsive websites tailored to your brand. From landing pages to full-stack applications, our team ensures quality design and seamless user experiences to help your digital presence stand out.
-</p>
-
+          <p className="max-w-2xl mb-6 font-light text-gray-500 lg:mb-8 md:text-lg lg:text-xl dark:text-gray-400">
+            The walls of Dream provide service to make the websites. We specialize in crafting visually appealing, fast, and responsive websites tailored to your brand. From landing pages to full-stack applications, our team ensures quality design and seamless user experiences to help your digital presence stand out.
+          </p>
           <a
             href="https://github.com"
-            className="inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-white bg-black rounded-lg hover:bg-gray-800 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-900"
+            className="inline-flex items-center justify-center px-5 py-3 text-base font-medium text-white bg-black rounded-lg hover:bg-gray-800 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-900"
           >
             <svg
               className="w-5 h-5 mr-2"
@@ -32,7 +44,6 @@ const HeroSection = () => {
           </a>
         </div>
 
-        
         <div className="hidden lg:mt-0 lg:col-span-5 lg:flex">
           <img
             src="https://themewagon.github.io/landwind/images/hero.png"

@@ -4,6 +4,7 @@ import Why from '../components/Why'
 import Testimonial from '../components/Testimonial'
 import About from '../components/About'
 import Footer from '../components/Footer'
+import Call from '../components/Call'
 
 const Home = () => {
   return (
@@ -12,7 +13,7 @@ const Home = () => {
       <Why/>
       {/* <About/> */}
       <Testimonial/>
-      <Footer/>
+      <Call/>
     </div>
   )
 }
