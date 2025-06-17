@@ -3,14 +3,14 @@ import { NavLink, useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
 
+  const isLoggedIn = !!localStorage.getItem('token'); 
   const handleLogout = () => {
-    setIsLoggedIn(false);
-    setShowDropdown(false);
-  };
+  localStorage.removeItem('token'); 
+  navigate('/login');
+};
 
   return (
     <div className="bg-white text-secondary flex items-center justify-between py-4 px-6 border-b border-gray-300 relative">
@@ -69,7 +69,7 @@ const Navbar = () => {
             onClick={() => navigate('/login')}
             className="bg-secondary text-primary px-6 py-2 rounded-full font-semibold text-sm hover:bg-opacity-80"
           >
-            CREATE ACCOUNT
+            Log In
           </button>
         )}
       </div>
