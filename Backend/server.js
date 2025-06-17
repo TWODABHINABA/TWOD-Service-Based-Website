@@ -1,9 +1,43 @@
 const express=require("express");
-require("dotenv").config()
+const cors = require("cors");
+const mongoose = require("mongoose");
 const bodyParser=require("body-parser");
+const userRoutes = require("./Routes/userRoutes");
+
+require("dotenv").config()
+
+const db = require("./db");
+
 const app=express();
-const PORT=process.env.PORT || 5001;
+
+
+app.use(cors());
+app.use(express.json());
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use("/", userRoutes);
+
+const allowedOrigins = [
+  "http://localhost:5173",
+];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
+
+
+const PORT=process.env.PORT || 5001;
+
 
 app.get("/get",(req,res)=>{
     res.send("YOU are IN")
