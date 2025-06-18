@@ -24,11 +24,9 @@ router.post('/api/signup', async (req, res) => {
 // Login Route
 router.post('/api/login', async (req, res) => {
   const { email, password } = req.body;
-    console.log(req.body);
   try {
     const user = await User.findOne({ email });
     if (!user) return res.status(400).json({ message: 'Invalid credentials email' });
-    console.log(user.password);
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ message: 'Invalid credentials password' });
 
