@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FaPhone, FaEnvelope, FaLinkedin, FaInstagram } from "react-icons/fa";
-
+import api from '../components/user-management/api';
 const Contact = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -17,34 +17,37 @@ const Contact = () => {
       [e.target.name]: e.target.value,
     }));
   };
-
+const token = localStorage.getItem("token");
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
+  e.preventDefault();
+  setIsSubmitting(true);
 
-    try {
-      
-      const res = await fetch("https://your-backend-api.com/contact", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (res.ok) {
-        setSubmitted(true);
-        setFormData({ name: "", email: "", message: "" });
-      } else {
-        alert("Failed to send message. Try again later.");
-      }
-    } catch (error) {
-      console.error("Submission error:", error);
-      alert("An error occurred. Please try again.");
+  try {
+    const res = await api.post(
+  '/request',
+  formData,
+  {
+    headers: {
+      Authorization: `Bearer ${token}`
     }
+  }
+);
 
-    setIsSubmitting(false);
-  };
+    // Axios will only reach here if response is 2xx
+    if (res.status === 201) {
+      setSubmitted(true);
+      setFormData({ name: "", email: "", message: "" });
+    } else {
+      alert("Failed to send message. Try again later.");
+    }
+  } catch (error) {
+    console.error("Submission error:", error);
+    alert("An error occurred. Please try again.");
+  }
+
+  setIsSubmitting(false);
+};
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-white via-white  p-6 md:p-16">

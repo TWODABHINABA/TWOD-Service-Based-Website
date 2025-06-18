@@ -3,10 +3,11 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const bodyParser=require("body-parser");
 const userRoutes = require("./Routes/userRoutes");
+const requestRoutes = require("./Routes/requestRoutes");
 
 require("dotenv").config()
 
-const db = require("./db");
+const db = require("./utils/db");
 
 const app=express();
 
@@ -17,6 +18,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/", userRoutes);
+app.use("/", requestRoutes);
 
 const allowedOrigins = [
   "http://localhost:5173",
