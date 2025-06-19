@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
+import '../App.css'; 
+
 import { useEffect } from 'react';
 import api from '../components/user-management/api'; 
 const Navbar = () => {
@@ -14,7 +16,7 @@ const Navbar = () => {
     navigate('/login');
   };
 
-  
+   
   useEffect(() => {
     const fetchUser = async () => {
       const token = localStorage.getItem('token');
@@ -107,9 +109,10 @@ const Navbar = () => {
             )}
           </div>
         ) : (
+
           <button
             onClick={() => navigate('/login')}
-            className="bg-secondary text-primary px-6 py-2 rounded-full font-semibold text-sm hover:bg-opacity-80"
+            className="btnlogin"
           >
             Log In
           </button>

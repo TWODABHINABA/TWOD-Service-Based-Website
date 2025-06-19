@@ -1,4 +1,5 @@
 import React from "react";
+import '../App.css';
 import {
   Card,
   CardBody,
@@ -6,6 +7,7 @@ import {
   Typography,
   Button,
 } from "@material-tailwind/react";
+
 
 const services = [
   {
@@ -58,13 +60,16 @@ const ServicesPage = () => {
             <CardFooter className="pt-0  space-x-4">
               
 
-              <Button
-                size="sm"
-                variant="filled"
-                className="bg-secondary hover:bg-primary"
-              >
-                Request Now
-              </Button>
+          {/* <!-- From Uiverse.io by faizanullah1999 -->  */}
+              <div class="button-borders">
+                <button class="primary-button">
+                  Register now
+                </button>
+              </div>
+
+
+
+
             </CardFooter>
           </Card>
         ))}
