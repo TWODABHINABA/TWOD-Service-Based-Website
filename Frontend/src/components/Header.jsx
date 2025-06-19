@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
-import '../pages/Contact.css'
+import '../App.css';
 
 const HeroSection = () => {
   const sectionRef = useRef(null);

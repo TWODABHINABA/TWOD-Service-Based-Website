@@ -1,5 +1,5 @@
 import React from "react";
-import './Contact.css';
+import '../App.css';
 import {
   Card,
   CardBody,
@@ -59,14 +59,6 @@ const ServicesPage = () => {
 
             <CardFooter className="pt-0  space-x-4">
               
-
-              {/* <Button
-                size="sm"
-                variant="filled"
-                className="bg-primary hover:bg-secondary "
-              >
-                Request Now
-              </Button> */}
 
           {/* <!-- From Uiverse.io by faizanullah1999 -->  */}
               <div class="button-borders">
