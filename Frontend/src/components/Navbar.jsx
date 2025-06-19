@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
+import '../App.css'; 
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -65,9 +66,10 @@ const Navbar = () => {
             )}
           </div>
         ) : (
+
           <button
             onClick={() => navigate('/login')}
-            className="bg-secondary text-primary px-6 py-2 rounded-full font-semibold text-sm hover:bg-opacity-80"
+            className="btnlogin"
           >
             Log In
           </button>

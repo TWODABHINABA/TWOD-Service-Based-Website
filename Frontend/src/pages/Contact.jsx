@@ -1,6 +1,8 @@
+
 import React, { useState } from "react";
 import { FaPhone, FaEnvelope, FaLinkedin, FaInstagram } from "react-icons/fa";
 import api from '../components/user-management/api';
+import '../App.css'; 
 const Contact = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -88,13 +90,80 @@ const token = localStorage.getItem("token");
                 className="w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary"
                 required
               ></textarea>
-              <button
+
+
+
+              {/* <button
                 type="submit"
                 disabled={isSubmitting}
                 className="w-full bg-primary text-white font-semibold py-3 rounded-xl hover:bg-secondary transition"
               >
                 {isSubmitting ? "Sending..." : "Send Message"}
-              </button>
+              </button> */}
+
+              {/* <!-- From Uiverse.io by adamgiebl -->  */}
+           <button
+  disabled={isSubmitting}
+  className="button"
+  type="submit"
+>
+  <div className="outline"></div>
+
+  {!submitted ? (
+    <div className="state state--default">
+      <div className="icon"></div>
+      <p>
+        <span style={{ "--i": 0 }}>S</span>
+        <span style={{ "--i": 1 }}>e</span>
+        <span style={{ "--i": 2 }}>n</span>
+        <span style={{ "--i": 3 }}>d</span>
+        <span style={{ "--i": 4 }}> </span>
+        <span style={{ "--i": 5 }}>M</span>
+        <span style={{ "--i": 6 }}>e</span>
+        <span style={{ "--i": 7 }}>s</span>
+        <span style={{ "--i": 8 }}>s</span>
+        <span style={{ "--i": 9 }}>a</span>
+        <span style={{ "--i": 10 }}>g</span>
+        <span style={{ "--i": 11 }}>e</span>
+      </p>
+    </div>
+  ) : (
+    <div className="state state--sent">
+      <div className="icon">
+        <svg
+        stroke="black"
+        stroke-width="0.5px"
+        width="1.2em"
+        height="1.2em"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      ><g style="filter: url(#shadow)">
+          <path
+            d="M12 22.75C6.07 22.75 1.25 17.93 1.25 12C1.25 6.07 6.07 1.25 12 1.25C17.93 1.25 22.75 6.07 22.75 12C22.75 17.93 17.93 22.75 12 22.75ZM12 2.75C6.9 2.75 2.75 6.9 2.75 12C2.75 17.1 6.9 21.25 12 21.25C17.1 21.25 21.25 17.1 21.25 12C21.25 6.9 17.1 2.75 12 2.75Z"
+            fill="currentColor"
+          ></path>
+          <path
+            d="M10.5795 15.5801C10.3795 15.5801 10.1895 15.5001 10.0495 15.3601L7.21945 12.5301C6.92945 12.2401 6.92945 11.7601 7.21945 11.4701C7.50945 11.1801 7.98945 11.1801 8.27945 11.4701L10.5795 13.7701L15.7195 8.6301C16.0095 8.3401 16.4895 8.3401 16.7795 8.6301C17.0695 8.9201 17.0695 9.4001 16.7795 9.6901L11.1095 15.3601C10.9695 15.5001 10.7795 15.5801 10.5795 15.5801Z"
+            fill="currentColor"
+          ></path>
+        </g>
+      </svg>
+      </div>
+      <p>
+        <span style={{ "--i": 0 }}>S</span>
+        <span style={{ "--i": 1 }}>e</span>
+        <span style={{ "--i": 2 }}>n</span>
+        <span style={{ "--i": 3 }}>t</span>
+        <span style={{ "--i": 4 }}>!</span>
+      </p>
+    </div>
+  )}
+</button>
+
+
+            
+            
             </form>
           )}
         </div>
@@ -151,3 +220,5 @@ const token = localStorage.getItem("token");
 };
 
 export default Contact;
+
+
