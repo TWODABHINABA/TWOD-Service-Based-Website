@@ -2,20 +2,49 @@ import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import '../App.css'; 
 
+import { useEffect } from 'react';
+import api from '../components/user-management/api'; 
 const Navbar = () => {
   const navigate = useNavigate();
   const [showDropdown, setShowDropdown] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [user, setUser] = useState(null);
 
-  const isLoggedIn = !!localStorage.getItem('token'); 
+  const isLoggedIn = !!localStorage.getItem('token');
   const handleLogout = () => {
-  localStorage.removeItem('token'); 
-  navigate('/login');
-};
+    localStorage.removeItem('token');
+    navigate('/login');
+  };
+
+   
+  useEffect(() => {
+    const fetchUser = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        setUser(null);
+        return;
+      }
+      try {
+        const res = await api.get('/user/me', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (res.status === 200) {
+          setUser(res.data);
+        } else {
+          setUser(null);
+        }
+      } catch (err) {
+        setUser(null);
+        console.error('Failed to fetch user:', err);
+      }
+    };
+    fetchUser();
+  }, []);
+    
 
   return (
     <div className="bg-white text-secondary flex items-center justify-between py-4 px-6 border-b border-gray-300 relative">
-      
+
       {/* Logo - Larger */}
       <img
         src="https://i0.wp.com/thewallofdreams.com/wp-content/uploads/2025/03/logo_twod-removebg-preview.png?w=846&ssl=1"
@@ -24,7 +53,7 @@ const Navbar = () => {
         onClick={() => navigate('/')}
       />
 
-      
+
       <ul className="hidden md:flex items-center gap-6 text-sm font-medium">
         <NavLink to="/" className="hover:text-primary">HOME</NavLink>
         <NavLink to="/aboutus" className="hover:text-primary">ABOUT US</NavLink>
@@ -32,7 +61,7 @@ const Navbar = () => {
         <NavLink to="/contact" className="hover:text-primary">CONTACT US</NavLink>
       </ul>
 
-      
+
       <div className="relative hidden md:block">
         {isLoggedIn ? (
           <div
@@ -47,6 +76,19 @@ const Navbar = () => {
             <span>▼</span>
             {showDropdown && (
               <div className="absolute right-0 mt-2 bg-white text-black shadow-md rounded-md p-3 z-10">
+                {user && user.role === "admin" && (
+                  <p
+                    onClick={() => {
+                      navigate('/admin/dashboard');
+                      setShowDropdown(false);
+                    }}
+                    className="cursor-pointer hover:text-primary mb-2"
+                  >
+                    <span className="text-primary font-bold">Admin Dashboard</span>
+                  </p>
+                )}
+              
+                
                 <p
                   onClick={() => {
                     navigate('/myprofile');
@@ -62,6 +104,7 @@ const Navbar = () => {
                 >
                   Logout
                 </p>
+                
               </div>
             )}
           </div>

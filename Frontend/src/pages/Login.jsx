@@ -8,7 +8,15 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
 
-  
+const handleGoogleLogin = () => {
+  window.location.href = 'http://localhost:6001/auth/google';
+};
+
+const handleGithubLogin = () => {
+  window.location.href = 'http://localhost:6001/auth/github'; 
+  };
+
+
 const handleSignUp = async (event) => {
   event.preventDefault();
   try {
@@ -99,6 +107,20 @@ const handleLogin = async (event) => {
           {state === 'Sign Up' ? "Create Account" : "Login"}
         </button>
 
+        <button
+          type='button' 
+          className='bg-primary text-white w-full rounded-md text-base py-2'
+          onClick = {handleGoogleLogin}
+        >
+          Login with Google
+        </button>
+        <button
+          type='button' 
+          className='bg-primary text-white w-full rounded-md text-base py-2'
+          onClick = {handleGithubLogin}
+        >
+          Login with Github
+        </button>
         {state === 'Sign Up' ? (
           <p>
             Already have an account?{" "}
