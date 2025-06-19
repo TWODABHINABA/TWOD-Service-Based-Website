@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const bodyParser=require("body-parser");
 const userRoutes = require("./Routes/userRoutes");
 const requestRoutes = require("./Routes/requestRoutes");
+const adminRoutes = require("./Routes/adminRoutes");
 
 require("dotenv").config()
 
@@ -19,6 +20,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/", userRoutes);
 app.use("/", requestRoutes);
+app.use("/admin", adminRoutes);
 
 const allowedOrigins = [
   "http://localhost:5173",
