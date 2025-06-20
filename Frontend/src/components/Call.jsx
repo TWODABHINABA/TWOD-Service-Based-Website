@@ -37,15 +37,14 @@ const CallToAction = () => {
           Ready to bring your ideas to life? Whether it’s a stunning website, a powerful app,
           or a fresh digital strategy — we’re here to help!
         </p>
-        <a
-          href="/contact"
-          className="inline-block px-8 py-3 bg-white text-indigo-700 font-semibold text-lg rounded-full shadow-lg hover:bg-gray-100 transition-all duration-300"
-        >
-          Contact Us
-        </a>
+      
+      <button class="contactbtn"><a href="/contact" > Contact Us </a></button>
+      
       </div>
     </section>
   );
 };
 
 export default CallToAction;
+
+
