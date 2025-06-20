@@ -35,7 +35,7 @@ const Footer = () => {
           <h1 className="text-2xl font-bold text-primary mb-4">About Us</h1>
           <div className="flex flex-col space-y-3 text-sm">
             <a href="#" className="hover:text-secondary">About</a>
-            <a href="#" className="hover:text-secondary">Careers</a>
+            <a href="/career" className="hover:text-secondary">Careers</a>
             <a href="#" className="hover:text-secondary">Contact</a>
           </div>
         </div>
