@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import '../pages/Contact.css'
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -68,11 +69,35 @@ const Why = () => {
             <div
               key={index}
               ref={(el) => (cardsRef.current[index] = el)}
-              className="bg-white shadow-md rounded-lg p-6"
+              
             >
+              <div class="card">
+              <div class="card__shine"></div>
+              <div class="card__glow"></div>
+              <div class="card__content">
+
               <div className="text-4xl mb-4">{card.icon}</div>
               <h3 className="text-xl font-semibold mb-2">{card.title}</h3>
               <p className="text-gray-600">{card.desc}</p>
+            
+             </div>
+              <div class="card__footer">
+                <div class="card__price">$49.99</div>
+                <div class="card__button">
+                  <svg height="16" width="16" viewBox="0 0 24 24">
+                    <path
+                      stroke-width="2"
+                      stroke="currentColor"
+                      d="M4 12H20M12 4V20"
+                      fill="currentColor"
+                    ></path>
+                  </svg>
+                </div>
+                </div>
+            </div>
+
+
+
             </div>
           ))}
         </div>
@@ -82,3 +107,6 @@ const Why = () => {
 };
 
 export default Why;
+
+
+

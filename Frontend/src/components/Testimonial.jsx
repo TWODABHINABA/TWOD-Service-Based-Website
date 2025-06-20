@@ -135,6 +135,8 @@ const Testimonial = () => {
                   index % 2 ? "shadow-lg" : "shadow-md"
                 }`}
               >
+              
+              
                 <div className="absolute top-[-45px] left-6">
                   <img
                     src={item.imgSrc}
@@ -144,6 +146,8 @@ const Testimonial = () => {
                     className="rounded-full border-4 border-white shadow"
                   />
                 </div>
+                <div class="clint-card">
+               <div class="clint-card-details">
                 <h4 className="text-base font-normal text-gray-700 mt-8 mb-4">{item.comment}</h4>
                 <div className="flex justify-between items-center">
                   <div>
@@ -152,6 +156,9 @@ const Testimonial = () => {
                   </div>
                   <div className="flex">{renderStars(item.rating)}</div>
                 </div>
+              </div>
+              </div>
+
               </div>
             </div>
           ))}
