@@ -43,15 +43,19 @@ const Navbar = () => {
     
 
   return (
-    <div className="bg-white text-secondary flex items-center justify-between py-4 px-6 border-b border-gray-300 relative">
+    <div className="top-0 sm:top-2 md:top-4 z-40 fixed left-1/2 transform -translate-x-1/2 w-full sm:w-[90%] md:w-5/6 bg-[rgb(29_28_32/var(--tw-bg-opacity,1))] shadow-lg dark:bg-[#1D1C20] px-4 py-2 sm:rounded-lg flex items-center justify-between font-dmSans text-[#f4f4f5]">
 
       {/* Logo - Larger */}
-      <img
-        src="https://i0.wp.com/thewallofdreams.com/wp-content/uploads/2025/03/logo_twod-removebg-preview.png?w=846&ssl=1"
-        alt="TWOD Logo"
-        className="w-32 sm:w-40 cursor-pointer "
-        onClick={() => navigate('/')}
-      />
+      <div className="relative flex items-center">
+        <div className="absolute inset-0 rounded-3xl blur-2xl opacity-100 bg-gradient-to-br from-secondary to-transparent scale-110 z-0"></div>
+        <img
+          src="https://i0.wp.com/thewallofdreams.com/wp-content/uploads/2025/03/logo_twod-removebg-preview.png?w=846&ssl=1"
+          alt="TWOD Logo"
+          className="w-32 sm:w-40 cursor-pointer rounded-lg p-2 relative z-10"
+          onClick={() => navigate('/')}
+        />
+      </div>
+      
 
 
       <ul className="hidden md:flex items-center gap-6 text-sm font-medium">
@@ -69,9 +73,9 @@ const Navbar = () => {
             onClick={() => setShowDropdown(!showDropdown)}
           >
             <img
-              src="https://via.placeholder.com/32"
+              src="https://png.pngtree.com/png-clipart/20230927/original/pngtree-man-avatar-image-for-profile-png-image_13001882.png"
               alt="Profile"
-              className="w-8 h-8 rounded-full"
+              className="w-14 h-14 rounded-full"
             />
             <span>▼</span>
             {showDropdown && (

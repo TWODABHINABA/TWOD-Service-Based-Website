@@ -9,10 +9,11 @@ import Login from './pages/Login'
 import AboutUs from './pages/AboutUs'
 import AdminDashboard from './pages/Admin/DashBoard'
 import CareerPage from './pages/Career'
-
+import { StarsBackground } from './components/animate-ui/backgrounds/stars';
 const App = () => {
   return (
     <div>
+      <StarsBackground>
       <Navbar/>
       <Routes>
         <Route path='/' element={<Home/>}/>
@@ -24,6 +25,7 @@ const App = () => {
         <Route path='/admin/dashboard' element={<AdminDashboard/>}/>
       </Routes>
       <Footer/>
+      </StarsBackground>
     </div>
   )
 }

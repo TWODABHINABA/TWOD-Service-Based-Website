@@ -37,8 +37,14 @@ const CallToAction = () => {
           Ready to bring your ideas to life? Whether it’s a stunning website, a powerful app,
           or a fresh digital strategy — we’re here to help!
         </p>
-      
-      <button class="contactbtn"><a href="/contact" > Contact Us </a></button>
+      <button
+        className="contactbtn rounded-full bg-white text-indigo-700 font-semibold px-8 py-3 shadow-lg hover:bg-indigo-700 hover:text-white transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-indigo-300 animate-bounce"
+      >
+        <a href="/contact" className="block w-full h-full">
+          Contact Us
+        </a>
+      </button>
+      {/* <button class="contactbtn"><a href="/contact" > Contact Us </a></button> */}
       
       </div>
     </section>

@@ -38,38 +38,34 @@ const services = [
 
 const ServicesPage = () => {
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
+    <div className="mt-20 min-h-screen px-4 md:px-24 lg:px-27 py-6">
       <Typography
         variant="h2"
-        className="text-center mb-10 text-gray-800 font-bold"
+        className="mt-10 text-center mb-10 text-white font-bold"
       >
         Our Services
       </Typography>
-
+      {/* Add horizontal padding for left and right gaps */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {services.map((service, index) => (
-          <Card key={index} className="p-6 rounded-2xl shadow-md hover:shadow-xl flex flex-col">
+          <Card
+            key={index}
+            className="p-4 rounded-xl shadow-none border border-gray-200 bg-transparent flex flex-col shadow-[0_4px_24px_0_rgba(255,255,255,0.5)]"
+            style={{ minHeight: "auto" }}
+          >
             <CardBody className="flex flex-col flex-grow">
-              <div className="text-6xl mb-5">{service.icon}</div>
-              <Typography variant="h5" color="blue-gray" className="mb-3 font-semibold">
+              <div className="text-4xl mb-3">{service.icon}</div>
+              <Typography variant="h6" color="blue-gray" className="text-gray-200 mb-2 font-semibold">
                 {service.name}
               </Typography>
-              <Typography className="text-gray-600 flex-grow">{service.description}</Typography>
+              <Typography className="text-gray-400 text-sm flex-grow">{service.description}</Typography>
             </CardBody>
-
-            <CardFooter className="pt-0  space-x-4">
-              
-
-          {/* <!-- From Uiverse.io by faizanullah1999 -->  */}
-              <div class="button-borders">
-                <button class="primary-button">
+            <CardFooter className="pt-0 space-x-4">
+              <div className="button-borders">
+                <button className="primary-button">
                   Register now
                 </button>
               </div>
-
-
-
-
             </CardFooter>
           </Card>
         ))}

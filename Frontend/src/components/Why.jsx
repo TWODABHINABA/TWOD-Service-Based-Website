@@ -39,9 +39,9 @@ const Why = () => {
   }, []);
 
   return (
-    <div ref={sectionRef} className="bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div ref={sectionRef} className="py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto text-center">
-        <h1 className="text-4xl font-extrabold text-gray-900 mb-4">
+        <h1 className="text-white text-4xl font-extrabold text-gray-900 mb-4">
           Why Choose Our TWOD Services
         </h1>
         <p className="text-lg text-gray-600 mb-10">
@@ -58,7 +58,7 @@ const Why = () => {
             {
               icon: '🎨',
               title: 'Custom Design',
-              desc: 'Each website is tailored to reflect your brand identity with unique and engaging design.',
+              desc: 'Each website is tailored to reflect your brand identity with unique and engaging design and nice product.',
             },
             {
               icon: '🤝',
@@ -66,38 +66,40 @@ const Why = () => {
               desc: 'We work closely with clients at every step, ensuring satisfaction and transparency throughout the project.',
             },
           ].map((card, index) => (
+
             <div
               key={index}
               ref={(el) => (cardsRef.current[index] = el)}
-              
             >
-              <div class="card">
-              <div class="card__shine"></div>
-              <div class="card__glow"></div>
-              <div class="card__content">
-
-              <div className="text-4xl mb-4">{card.icon}</div>
-              <h3 className="text-xl font-semibold mb-2">{card.title}</h3>
-              <p className="text-gray-600">{card.desc}</p>
-            
-             </div>
-              <div class="card__footer">
-                <div class="card__price">$49.99</div>
-                <div class="card__button">
-                  <svg height="16" width="16" viewBox="0 0 24 24">
-                    <path
-                      stroke-width="2"
-                      stroke="currentColor"
-                      d="M4 12H20M12 4V20"
-                      fill="currentColor"
-                    ></path>
-                  </svg>
+              <div
+                className="card custom-card relative overflow-hidden rounded-xl bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 p-1 transition-transform transform hover:scale-105"
+                style={{
+                  
+                  boxShadow: '0 4px 24px 0 rgba(255,255,255,0.25)',
+                }}
+              >
+                <div className="card__shine absolute inset-0 pointer-events-none"></div>
+                <div className="card__glow absolute -inset-2 blur-2xl opacity-30 bg-gradient-to-tr from-purple-500 via-pink-500 to-yellow-500"></div>
+                <div className="card__content relative z-10 bg-black bg-opacity-90 text-white p-8 rounded-xl flex flex-col items-center">
+                  <div className="text-5xl mb-4">{card.icon}</div>
+                  <h3 className="text-2xl font-bold mb-2">{card.title}</h3>
+                  <p className="text-gray-300 text-center">{card.desc}</p>
                 </div>
+                <div className="card__footer relative z-10 text-center mt-4">
+                  <div className="card__price text-lg font-semibold text-white mb-2">$49.99</div>
+                  <button className="card__button inline-flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full shadow-lg hover:from-pink-500 hover:to-yellow-500 transition-all duration-300">
+                    <svg height="18" width="18" viewBox="0 0 24 24" fill="none">
+                      <path
+                        strokeWidth="2"
+                        stroke="currentColor"
+                        d="M4 12H20M12 4V20"
+                        fill="none"
+                      ></path>
+                    </svg>
+                    Buy Now
+                  </button>
                 </div>
-            </div>
-
-
-
+              </div>
             </div>
           ))}
         </div>
