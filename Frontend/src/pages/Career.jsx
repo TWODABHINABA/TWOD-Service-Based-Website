@@ -62,9 +62,10 @@ const CareerPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 p-6">
+    <div className="mt-20 min-h-screen p-6">
+      <div className="mt-5"></div>
       <div className="max-w-6xl mx-auto flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Career Opportunities</h1>
+        <h1 className="text-white text-3xl font-bold">Career Opportunities</h1>
 
         {loggedIn ? (
           <div className="flex items-center gap-4">
@@ -145,7 +146,7 @@ const CareerPage = () => {
         {jobs.map((job) => (
           <div
             key={job.id}
-            className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition relative group"
+            className="bg-black bg-opacity-90 rounded-2xl p-6 shadow-lg hover:shadow-xl transition relative group shadow-[0_4px_24px_0_rgba(255,255,255,0.5)]"
           >
             <div className="flex items-center gap-2 text-secondary mb-2">
               <FaBriefcase />
@@ -177,7 +178,7 @@ const CareerPage = () => {
             ) : (
               <button
                 onClick={() => handleApply(job.title)}
-                className="mt-4 bg-secondary text-white w-full py-2 rounded hover:bg-primary"
+                className="mt-4 border border-white text-white w-full py-2 rounded hover:bg-primary"
               >
                 Apply Now
               </button>

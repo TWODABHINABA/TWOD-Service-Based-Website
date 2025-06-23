@@ -28,7 +28,10 @@ const teamMembers = [
 
 const AboutUs = () => {
   return (
+    
+    <div className="mt-20">
     <div className="text-white min-h-screen p-6 md:p-12 transition-all duration-700 ease-in-out">
+      <div className="mt-20"></div>
       <About />
 
       
@@ -60,7 +63,7 @@ const AboutUs = () => {
 
       
       <section className="max-w-5xl mx-auto mt-16 transition duration-700 ease-in-out hover:scale-[1.01]">
-        <h2 className="text-4xl font-extrabold mb-8 border-b-4 inline-block border-secondary pb-1 text-primary">
+        <h2 className="text-white text-4xl font-extrabold mb-8 border-b-4 inline-block border-secondary pb-1 text-primary">
           Mission & Vision
         </h2>
         <div className="grid md:grid-cols-2 gap-8">
@@ -84,22 +87,23 @@ const AboutUs = () => {
 
       
       <section className="max-w-5xl mx-auto mt-20">
-        <h2 className="text-4xl font-extrabold mb-12 border-b-4 inline-block border-secondary pb-1 text-primary">
+        <h2 className="text-white text-4xl font-extrabold mb-12 border-b-4 inline-block border-secondary pb-1 text-primary">
           Meet the Team
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-14">
           {teamMembers.map((member, index) => (
+            
             <div
               key={index}
-              className="flex flex-col items-center text-center rounded-3xl py-10 px-6 shadow-lg hover:shadow-2xl transition duration-500"
+              className="bg-black bg-opacity-90 border-4 border-white rounded-2xl flex flex-col items-center text-center rounded-3xl py-10 px-6 shadow-[0_4px_24px_0_rgba(255,255,255,0.5)]"
             >
               <img
-                src={member.image}
+                src={"https://png.pngtree.com/png-clipart/20230927/original/pngtree-man-avatar-image-for-profile-png-image_13001882.png"}
                 alt={member.name}
                 className="w-32 h-32 rounded-full object-cover border-4 border-secondary mb-4"
               />
-              <h3 className="text-xl font-bold text-primary">{member.name}</h3>
-              <p className="text-gray-800 text-sm mt-1">{member.role}</p>
+              <h3 className="text-xl font-bold text-white">{member.name}</h3>
+              <p className="text-gray-400 text-sm mt-1">{member.role}</p>
               <div className="mt-4">
                 <a
                   href={member.linkedin}
@@ -115,6 +119,7 @@ const AboutUs = () => {
           ))}
         </div>
       </section>
+    </div>
     </div>
   );
 };

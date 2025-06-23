@@ -52,8 +52,9 @@ const token = localStorage.getItem("token");
 
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-white  p-6 md:p-16">
-      <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 bg-white rounded-2xl shadow-2xl overflow-hidden">
+    <div className="mt-20"> <div className="mt-50 min-h-screen  from-white via-white  p-6 md:p-16">
+      <div className="mt-10"></div>
+      <div className="mt-50 max-w-6xl mx-auto grid md:grid-cols-2 gap-10 bg-white rounded-2xl shadow-2xl overflow-hidden">
         
         
         <div className="p-8 space-y-6">
@@ -214,6 +215,7 @@ const token = localStorage.getItem("token");
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 };
