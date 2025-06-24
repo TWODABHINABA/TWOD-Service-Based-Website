@@ -83,7 +83,7 @@ const Navbar = () => {
                 {user && user.role === "admin" && (
                   <p
                     onClick={() => {
-                      navigate('/admin/dashboard');
+                      navigate('/admin');
                       setShowDropdown(false);
                     }}
                     className="cursor-pointer hover:text-primary mb-2"
