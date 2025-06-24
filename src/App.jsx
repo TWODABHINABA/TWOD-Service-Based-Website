@@ -23,6 +23,8 @@ const App = () => {
         <Route path='/contact' element={<Contact/>}/>
         <Route path='/career' element={<CareerPage/>} />
         <Route path='/admin/dashboard' element={<AdminDashboard/>}/>
+        {/* <Route path="/feedback" element={<Feedback />} /> */}
+
       </Routes>
       <Footer/>
       </StarsBackground>
