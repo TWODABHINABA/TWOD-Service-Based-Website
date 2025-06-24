@@ -46,7 +46,24 @@ useEffect(() => {
   }, []);
   
   return (
-    <div className="relative">
+
+    <div>
+      <StarsBackground>
+      <Navbar/>
+      <Routes>
+        <Route path='/' element={<Home/>}/>
+        <Route path='/login' element={<Login/>} />
+        <Route path='/aboutus' element={<AboutUs/>}/>
+        <Route path='/services' element={<Services/>}/>
+        <Route path='/contact' element={<Contact/>}/>
+        <Route path='/career' element={<CareerPage/>} />
+        <Route path='/admin/dashboard' element={<AdminDashboard/>}/>
+        {/* <Route path="/feedback" element={<Feedback />} /> */}
+
+      </Routes>
+      <Footer/>
+      </StarsBackground>
+   <div className="relative">
       <StarsBackground className="z-0 fixed inset-0" />
       <div className="relative z-10">
         <Navbar />
