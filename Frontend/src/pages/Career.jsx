@@ -1,191 +1,163 @@
-import React, { useState } from "react";
-import { FaMapMarkerAlt, FaTrashAlt, FaBriefcase } from "react-icons/fa";
+import React, { useState, useEffect } from "react";
+import { FaMapMarkerAlt, FaBriefcase } from "react-icons/fa";
+import api from "../components/user-management/api";
+import { useNavigate } from "react-router-dom";
 
-const CareerPage = () => {
-  const [jobs, setJobs] = useState([
-    {
-      id: 1,
-      title: "Frontend Developer",
-      location: "Remote",
-      skills: ["React", "Tailwind", "JavaScript"],
-    },
-  ]);
+const CareerPage = ({ user }) => {
+  const navigate = useNavigate();
 
-  const [formData, setFormData] = useState({
-    title: "",
-    location: "",
-    skills: "",
+  const [jobs, setJobs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedJob, setSelectedJob] = useState(null);
+  const [applicationData, setApplicationData] = useState({
+    resumeUrl: '',
+    coverLetterUrl: '',
   });
 
-  const [email, setEmail] = useState("");
-  const [loggedIn, setLoggedIn] = useState(false);
-  const isAdmin = email === "admin@example.com";
-
-  const handleLogin = () => {
-    if (email.trim()) {
-      setLoggedIn(true);
+  const fetchJobs = async () => {
+    try {
+      setLoading(true);
+      const res = await api.get('/jobs');
+      setJobs(res.data);
+    } catch (err) {
+      console.error("Failed to fetch jobs:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleLogout = () => {
-    setLoggedIn(false);
-    setEmail("");
+  useEffect(() => {
+    fetchJobs();
+  }, []);
+
+  const handleApplyClick = (job) => {
+    if (!user) {
+      alert("Please log in to apply for a job.");
+      navigate('/login');
+      return;
+    }
+    setSelectedJob(job);
+    setIsModalOpen(true);
   };
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleModalChange = (e) => {
+    setApplicationData({ ...applicationData, [e.target.name]: e.target.value });
   };
 
-  const addJob = (e) => {
+  const handleApplicationSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.title || !formData.location || !formData.skills) return;
+    if (!selectedJob || !user) return;
 
-    setJobs([
-      ...jobs,
-      {
-        id: Date.now(),
-        title: formData.title,
-        location: formData.location,
-        skills: formData.skills.split(",").map((s) => s.trim()),
-      },
-    ]);
-
-    setFormData({ title: "", location: "", skills: "" });
-  };
-
-  const deleteJob = (id) => {
-    setJobs(jobs.filter((job) => job.id !== id));
-  };
-
-  const handleApply = (jobTitle) => {
-    alert(`You applied for "${jobTitle}"`);
+    try {
+      await api.post('/applications/new', {
+        jobId: selectedJob._id,
+        applicantId: user._id,
+        resumeUrl: applicationData.resumeUrl,
+        coverLetter: applicationData.coverLetterUrl,
+      });
+      alert('Application submitted successfully!');
+      setIsModalOpen(false);
+      setApplicationData({ resumeUrl: '', coverLetterUrl: '' });
+    } catch (err) {
+      alert('Failed to submit application.');
+      console.error('Error submitting application:', err);
+    }
   };
 
   return (
-    <div className="mt-20 min-h-screen p-6">
-      <div className="mt-5"></div>
-      <div className="max-w-6xl mx-auto flex justify-between items-center mb-6">
-        <h1 className="text-white text-3xl font-bold">Career Opportunities</h1>
+    <div className="mt-20 min-h-screen p-6 text-white">
+      <div className="max-w-6xl mx-auto">
+        <h1 className="text-3xl font-bold mb-8 text-center">Career Opportunities</h1>
 
-        {loggedIn ? (
-          <div className="flex items-center gap-4">
-            <p className="text-sm">
-              Logged in as:{" "}
-              <span className="font-semibold text-blue-600">{email}</span>
-            </p>
-            <button
-              onClick={handleLogout}
-              className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
-            >
-              Logout
-            </button>
-          </div>
+        {loading ? (
+          <p className="text-center">Loading jobs...</p>
         ) : (
-          <div className="flex gap-2">
-            <input
-              type="email"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="border px-3 py-1 rounded"
-            />
-            <button
-              onClick={handleLogin}
-              className="bg-primary text-white px-3 py-1 rounded hover:bg-secondary"
-            >
-              Login
-            </button>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {jobs.map((job) => (
+              <div
+                key={job._id}
+                className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 shadow-lg hover:shadow-xl transition relative group border border-white/20"
+              >
+                <div className="flex items-center gap-3 text-secondary mb-3">
+                  <FaBriefcase size={20} />
+                  <h3 className="text-xl font-semibold">{job.jobName}</h3>
+                </div>
+                <div className="flex items-center text-sm text-gray-300 mb-4">
+                  <FaMapMarkerAlt className="mr-2" />
+                  {job.location}
+                </div>
+
+                <div className="mb-4">
+                  <p className="font-semibold mb-1">Skills:</p>
+                  <div className="flex flex-wrap gap-2">
+                    {Array.isArray(job.skillsRequired) && job.skillsRequired.map((skill, index) => (
+                      <span
+                        key={index}
+                        className="bg-blue-500/20 text-blue-300 px-3 py-1 text-xs rounded-full"
+                      >
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <p className="text-sm text-gray-300 mb-1"><span className="font-semibold">Degree:</span> {job.degree}</p>
+                <p className="text-sm text-gray-300 mb-4"><span className="font-semibold">Salary:</span> {job.salary}</p>
+
+                <button
+                  onClick={() => handleApplyClick(job)}
+                  className="mt-4 bg-blue-600 w-full py-2.5 rounded-lg hover:bg-blue-700 transition-colors"
+                >
+                  Apply Now
+                </button>
+              </div>
+            ))}
           </div>
         )}
       </div>
 
-      {/* Admin Job Form */}
-      {loggedIn && isAdmin && (
-        <form
-          onSubmit={addJob}
-          className="max-w-xl mx-auto bg-white p-6 rounded-2xl shadow-md space-y-4 mb-10"
-        >
-          <h2 className="text-xl font-semibold mb-4 text-gray-700">
-            + Add New Job
-          </h2>
-          <input
-            type="text"
-            name="title"
-            placeholder="Job Title"
-            value={formData.title}
-            onChange={handleChange}
-            className="w-full border p-2 rounded"
-          />
-          <input
-            type="text"
-            name="location"
-            placeholder="Location"
-            value={formData.location}
-            onChange={handleChange}
-            className="w-full border p-2 rounded"
-          />
-          <input
-            type="text"
-            name="skills"
-            placeholder="Skills (comma-separated)"
-            value={formData.skills}
-            onChange={handleChange}
-            className="w-full border p-2 rounded"
-          />
-          <button
-            type="submit"
-            className="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition"
-          >
-            Add Job
-          </button>
-        </form>
-      )}
-
-      {/* Job Cards */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-        {jobs.map((job) => (
-          <div
-            key={job.id}
-            className="bg-black bg-opacity-90 rounded-2xl p-6 shadow-lg hover:shadow-xl transition relative group shadow-[0_4px_24px_0_rgba(255,255,255,0.5)]"
-          >
-            <div className="flex items-center gap-2 text-secondary mb-2">
-              <FaBriefcase />
-              <h3 className="text-lg font-semibold">{job.title}</h3>
-            </div>
-            <div className="flex items-center text-sm text-gray-500 mb-2">
-              <FaMapMarkerAlt className="mr-1" />
-              {job.location}
-            </div>
-
-            <div className="mt-2 flex flex-wrap gap-2">
-              {job.skills.map((skill, index) => (
-                <span
-                  key={index}
-                  className="bg-blue-100 text-blue-700 px-3 py-1 text-xs rounded-full"
+      {isModalOpen && selectedJob && (
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+          <div className="bg-gray-800 p-8 rounded-2xl shadow-xl w-full max-w-lg text-white border border-white/20">
+            <h2 className="text-2xl font-bold mb-4">Apply for {selectedJob.jobName}</h2>
+            <form onSubmit={handleApplicationSubmit} className="space-y-4">
+              <input
+                type="url"
+                name="resumeUrl"
+                placeholder="Resume URL"
+                value={applicationData.resumeUrl}
+                onChange={handleModalChange}
+                className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/30"
+                required
+              />
+              <input
+                type="url"
+                name="coverLetterUrl"
+                placeholder="Cover Letter URL (Optional)"
+                value={applicationData.coverLetterUrl}
+                onChange={handleModalChange}
+                className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/30"
+              />
+              <div className="flex justify-end gap-4 pt-4">
+                <button
+                  type="button"
+                  onClick={() => setIsModalOpen(false)}
+                  className="px-6 py-2 rounded-lg bg-gray-600 hover:bg-gray-700"
                 >
-                  {skill}
-                </span>
-              ))}
-            </div>
-
-            {isAdmin && loggedIn ? (
-              <button
-                onClick={() => deleteJob(job.id)}
-                className="absolute top-4 right-4 text-red-500 hover:text-red-700 transition"
-              >
-                <FaTrashAlt />
-              </button>
-            ) : (
-              <button
-                onClick={() => handleApply(job.title)}
-                className="mt-4 border border-white text-white w-full py-2 rounded hover:bg-primary"
-              >
-                Apply Now
-              </button>
-            )}
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-6 py-2 rounded-lg bg-blue-600 hover:bg-blue-700"
+                >
+                  Submit Application
+                </button>
+              </div>
+            </form>
           </div>
-        ))}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

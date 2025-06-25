@@ -1,33 +1,27 @@
-
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { FaLinkedin } from "react-icons/fa";
 import About from "../components/About";
-
-const teamMembers = [
-  {
-    name: "Abhinaba Das",
-    role: "Backend Developer",
-    bio: "Loves building scalable backend systems and APIs.",
-    image: "/team/abhinaba.png",
-    linkedin: "/",
-  },
-  {
-    name: "Aditya Jaiswal",
-    role: "Frontend Developer",
-    bio: "Passionate about creating responsive and user-friendly web interfaces.",
-    image: "/team/aditya.png",
-    linkedin: "https://www.linkedin.com/in/aditya-kumar-jaiswal-4a986b257/",
-  },
-  {
-    name: "Ravi Verma",
-    role: "UI/UX Designer",
-    bio: "Focused on crafting clean and intuitive user experiences.",
-    image: "/team/ravi.png",
-    linkedin: "https://linkedin.com/in/raviverma",
-  },
-];
+import api from "../components/user-management/api";
 
 const AboutUs = () => {
+  const [teamMembers, setTeamMembers] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTeamMembers = async () => {
+      try {
+        setLoading(true);
+        const res = await api.get('/team');
+        setTeamMembers(res.data);
+      } catch (err) {
+        console.error("Failed to fetch team members:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchTeamMembers();
+  }, []);
+
   return (
     <div className="mt-20">
       <div className="text-white min-h-screen p-6 md:p-12 transition-all duration-700 ease-in-out">
@@ -58,33 +52,37 @@ const AboutUs = () => {
           <h2 className="text-white text-4xl font-extrabold mb-12 border-b-4 inline-block border-secondary pb-1">
             Meet the Team
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-14">
-            {teamMembers.map((member, index) => (
-              <div
-                key={index}
-                className="bg-black bg-opacity-90 border-2 border-white rounded-3xl flex flex-col items-center text-center py-10 px-6 shadow-[0_4px_24px_0_rgba(255,255,255,0.5)] hover:shadow-2xl hover:scale-105 hover:border-secondary transition-all duration-500 ease-in-out"
-              >
-                <img
-                  src={"https://png.pngtree.com/png-clipart/20230927/original/pngtree-man-avatar-image-for-profile-png-image_13001882.png"}
-                  alt={member.name}
-                  className="w-32 h-32 rounded-full object-cover border-4 border-secondary mb-4"
-                />
-                <h3 className="text-xl font-bold text-white">{member.name}</h3>
-                <p className="text-gray-400 text-sm mt-1">{member.role}</p>
-                <div className="mt-4">
-                  <a
-                    href={member.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-sky-700 hover:text-sky-500 transition-transform transform hover:scale-110 duration-300"
-                    title="LinkedIn"
-                  >
-                    <FaLinkedin size={24} />
-                  </a>
+          {loading ? (
+            <p className="text-center">Loading team members...</p>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-14">
+              {teamMembers.map((member, index) => (
+                <div
+                  key={index}
+                  className="bg-black bg-opacity-90 border-2 border-white rounded-3xl flex flex-col items-center text-center py-10 px-6 shadow-[0_4px_24px_0_rgba(255,255,255,0.5)] hover:shadow-2xl hover:scale-105 hover:border-secondary transition-all duration-500 ease-in-out"
+                >
+                  <img
+                    src={member.image || "https://png.pngtree.com/png-clipart/20230927/original/pngtree-man-avatar-image-for-profile-png-image_13001882.png"}
+                    alt={member.name}
+                    className="w-32 h-32 rounded-full object-cover border-4 border-secondary mb-4"
+                  />
+                  <h3 className="text-xl font-bold text-white">{member.name}</h3>
+                  <p className="text-gray-400 text-sm mt-1">{member.skill}</p>
+                  <div className="mt-4">
+                    <a
+                      href={`https://linkedin.com/in/${member.linkedinId}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sky-700 hover:text-sky-500 transition-transform transform hover:scale-110 duration-300"
+                      title="LinkedIn"
+                    >
+                      <FaLinkedin size={24} />
+                    </a>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </section>
       </div>
     </div>

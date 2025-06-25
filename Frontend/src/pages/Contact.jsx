@@ -21,6 +21,10 @@ const Contact = () => {
   };
 const token = localStorage.getItem("token");
   const handleSubmit = async (e) => {
+    if(!token){
+      alert("Please log in to submit the form.");
+      return;
+    }
   e.preventDefault();
   setIsSubmitting(true);
 
