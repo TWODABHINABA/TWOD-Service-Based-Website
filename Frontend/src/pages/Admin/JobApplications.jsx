@@ -18,10 +18,41 @@ const JobApplications = () => {
     }
   };
 
+  const token = localStorage.getItem('token');
+  const [isAdmin, setIsAdmin] = useState(false);
   useEffect(() => {
-    fetchApplications();
-  }, []);
+        if (!token) return;
+        const checkAdmin = async () => {
+            try {
+                const res = await api.get('/admin/me', {
+                    headers: {  
+                        Authorization: `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+                setIsAdmin(res.data.role === 'admin');
+            } catch (error) {
+                console.error('Failed to check admin status:', error);
+                setIsAdmin(false);
+            }
+        };
+        checkAdmin();
+    }, [token]);
 
+    useEffect(() => {
+    if (token && isAdmin) {
+      fetchApplications();
+    }
+  }, [token, isAdmin]);
+
+    if (!token) {
+        return <div className="mt-20 text-center text-white" style={{ padding: "2rem", fontFamily: "Arial, sans-serif" }}>You must be logged in to view this page.</div>;
+    }
+
+    if (!isAdmin) {
+        return <div className="mt-20 text-center text-white" style={{ padding: "2rem", fontFamily: "Arial, sans-serif" }}>Only admin has access to this page.</div>;
+    }
+
+  
   const handleStatusChange = async (id, status) => {
     try {
       await api.post(`/applications/${id}/status`, { status });

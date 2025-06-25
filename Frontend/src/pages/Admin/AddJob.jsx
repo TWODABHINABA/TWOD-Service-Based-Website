@@ -10,11 +10,46 @@ const AddJob = () => {
     degree: '',
     perks: '',
     location: '',
-    salaryRange: ''
+    salary: ''
   });
 
   const [jobList, setJobList] = useState([]);
   const [loading, setLoading] = useState(false);
+
+
+  const [isAdmin, setIsAdmin] = useState(false);
+  const token = localStorage.getItem('token');
+
+    useEffect(() => {
+        if (!token) return;
+        const checkAdmin = async () => {
+            try {
+                const res = await api.get('/admin/me', {
+                    headers: {  
+                        Authorization: `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+                setIsAdmin(res.data.role === 'admin');
+            } catch (error) {
+                console.error('Failed to check admin status:', error);
+                setIsAdmin(false);
+            }
+        };
+        checkAdmin();
+    }, [token]);
+useEffect(() => {
+  if (token && isAdmin) {
+    fetchJobs();
+  }
+}, [token, isAdmin]);
+
+if (!token) {
+        return <div className="mt-20 text-center text-white" style={{ padding: "2rem", fontFamily: "Arial, sans-serif" }}>You must be logged in to view this page.</div>;
+    }
+
+    if (!isAdmin) {
+        return <div className="mt-20 text-center text-white" style={{ padding: "2rem", fontFamily: "Arial, sans-serif" }}>Only admin has access to this page.</div>;
+    }
 
   // Fetch jobs from backend
   const fetchJobs = async () => {
@@ -28,10 +63,6 @@ const AddJob = () => {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    fetchJobs();
-  }, []);
 
   const handleChange = (e) => {
     setJobData({ ...jobData, [e.target.name]: e.target.value });
@@ -56,7 +87,7 @@ const AddJob = () => {
         degree: '',
         perks: '',
         location: '',
-        salaryRange: ''
+        salary: ''
       });
       fetchJobs();
     } catch (err) {
@@ -142,11 +173,11 @@ const AddJob = () => {
           </div>
 
           <div className="col-span-1">
-            <label className="block mb-2 font-semibold">Salary Range</label>
+            <label className="block mb-2 font-semibold">Salary</label>
             <input
               type="text"
-              name="salaryRange"
-              value={jobData.salaryRange}
+              name="salary"
+              value={jobData.salary}
               onChange={handleChange}
               className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/30 outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="e.g. 5-8 LPA"
@@ -214,7 +245,7 @@ const AddJob = () => {
                   <span className="font-semibold">Location:</span> {job.location}
                 </p>
                 <p className="mb-1">
-                  <span className="font-semibold">Salary Range:</span> {job.salaryRange}
+                  <span className="font-semibold">Salary:</span> {job.salary}
                 </p>
                 <p className="mb-2">
                   <span className="font-semibold">Description:</span> {job.description}

@@ -6,9 +6,9 @@ const router = express.Router();
 const TeamMember = require('../Models/developers');
 const JobApplication = require('../Models/applications');
 const Service = require('../Models/services');
-
+const {isAuthenticated, isAdmin} = require('../utils/middleware'); // Adjust path as needed
 // Route: GET /admin/users
-router.get('/users',  async (req, res) => {
+router.get('/users', isAuthenticated, isAdmin, async (req, res) => {
     try {
         const users = await User.find().select('-password'); // Exclude password field
         res.json(users);
@@ -19,7 +19,7 @@ router.get('/users',  async (req, res) => {
 });
 
 // Route: GET /admin/requests
-router.get('/requests',  async (req, res) => {
+router.get('/requests', isAuthenticated, isAdmin,  async (req, res) => {
     try {
         // Assuming you have a Request model to fetch requests
         const requests = await Request.find().populate('user'); // Adjust this line based on your actual model
@@ -31,7 +31,7 @@ router.get('/requests',  async (req, res) => {
 });
 
 
-router.post('/requests/:id/accept', async (req, res) => {
+router.post('/requests/:id/accept', isAuthenticated, isAdmin, async (req, res) => {
     try {
         const requestId = req.params.id;
         const request = await Request.findById(requestId);
@@ -48,7 +48,7 @@ router.post('/requests/:id/accept', async (req, res) => {
 });
 
 
-router.post('/newJob',  async (req, res) => {
+router.post('/newJob', isAuthenticated, isAdmin,  async (req, res) => {
     try {
         // Assuming you have a Job model
         const jobData = req.body;
@@ -62,20 +62,10 @@ router.post('/newJob',  async (req, res) => {
     }
 });
 
-router.get('/jobs',  async (req, res) => {
-    try {
-        // Fetch all jobs
-        const jobs = await Job.find();
-        res.json(jobs);
-    }   
-catch (error) {
-        console.error('Error fetching jobs:', error);
-        res.status(500).json({ message: 'Internal server error' });
-    }
-});
 
 
-router.post('/newTeamMember',  async (req, res) => {
+
+router.post('/newTeamMember',  isAuthenticated, isAdmin, async (req, res) => {
     try {
         const teamMemberData = req.body;
         console.log(teamMemberData);
@@ -88,17 +78,9 @@ router.post('/newTeamMember',  async (req, res) => {
     }
 });
 
-router.get('/team',  async (req, res) => {
-    try {
-        const teamMembers = await TeamMember.find();
-        res.json(teamMembers);
-    } catch (error) {
-        console.error('Error fetching team members:', error);
-        res.status(500).json({ message: 'Internal server error' });
-    }
-});
 
-router.get('/jobApplications',  async (req, res) => {
+
+router.get('/jobApplications', isAuthenticated, isAdmin,  async (req, res) => {
     try {
         const jobApplications = await JobApplication.find().populate('applicantId').populate('jobId');
         res.json(jobApplications);
@@ -108,17 +90,9 @@ router.get('/jobApplications',  async (req, res) => {
     }
 });
 
-router.get('/services',  async (req, res) => {
-    try {
-        const services = await Service.find();
-        res.json(services);
-    } catch (error) {
-        console.error('Error fetching services:', error);
-        res.status(500).json({ message: 'Internal server error' });
-    }
-});
 
-router.post('/newService',  async (req, res) => {
+
+router.post('/newService', isAuthenticated, isAdmin, async (req, res) => {
     try {
         const serviceData = req.body;
         console.log(serviceData);
@@ -131,7 +105,7 @@ router.post('/newService',  async (req, res) => {
     }
 });
 
-router.delete('/services/:id',  async (req, res) => {
+router.delete('/services/:id', isAuthenticated, isAdmin, async (req, res) => {
     try {
         const serviceId = req.params.id;
         await Service.findByIdAndDelete(serviceId);

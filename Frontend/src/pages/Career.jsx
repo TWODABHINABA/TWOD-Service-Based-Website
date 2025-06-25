@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { FaMapMarkerAlt, FaBriefcase } from "react-icons/fa";
 import api from "../components/user-management/api";
+import { useNavigate } from "react-router-dom";
 
 const CareerPage = ({ user }) => {
+  const navigate = useNavigate();
+
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -15,7 +18,7 @@ const CareerPage = ({ user }) => {
   const fetchJobs = async () => {
     try {
       setLoading(true);
-      const res = await api.get('/admin/jobs');
+      const res = await api.get('/jobs');
       setJobs(res.data);
     } catch (err) {
       console.error("Failed to fetch jobs:", err);
@@ -31,6 +34,7 @@ const CareerPage = ({ user }) => {
   const handleApplyClick = (job) => {
     if (!user) {
       alert("Please log in to apply for a job.");
+      navigate('/login');
       return;
     }
     setSelectedJob(job);
@@ -99,7 +103,7 @@ const CareerPage = ({ user }) => {
                 </div>
 
                 <p className="text-sm text-gray-300 mb-1"><span className="font-semibold">Degree:</span> {job.degree}</p>
-                <p className="text-sm text-gray-300 mb-4"><span className="font-semibold">Salary:</span> {job.salaryRange}</p>
+                <p className="text-sm text-gray-300 mb-4"><span className="font-semibold">Salary:</span> {job.salary}</p>
 
                 <button
                   onClick={() => handleApplyClick(job)}

@@ -16,7 +16,8 @@ const ServicesPage = () => {
     const fetchServices = async () => {
       try {
         setLoading(true);
-        const res = await api.get('/admin/services');
+        const res = await api.get('/services');
+        console.log("Fetched services:", res.data);
         setServices(res.data);
       } catch (err) {
         console.error("Failed to fetch services:", err);
