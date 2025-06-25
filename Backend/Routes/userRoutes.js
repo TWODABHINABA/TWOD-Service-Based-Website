@@ -8,6 +8,9 @@ const { isAuthenticated, isAdmin } = require('../utils/middleware');
 const passport = require("passport");
 require('../utils/passport');
 const Application = require('../Models/applications');
+const Job = require('../Models/jobs');
+const Service = require('../Models/services');
+const TeamMember = require('../Models/developers');
 
 
 router.use(passport.initialize());
@@ -124,11 +127,44 @@ router.get('/admin/me', isAuthenticated, isAdmin, async (req, res) => {
 
 
 
-router.post('/applications/new', async (req, res) => {
+router.post('/applications/new', isAuthenticated, async (req, res) => {
   const { jobId, applicantId, resumeUrl, coverLetter } = req.body;
   const newApplication = new Application({ jobId, applicantId, resumeUrl, coverLetter });
   await newApplication.save();
   res.status(201).json({ message: 'Application submitted successfully' });
+});
+
+router.get('/services',  async (req, res) => {
+    try {
+        const services = await Service.find();
+        res.json(services);
+    } catch (error) {
+        console.error('Error fetching services:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+router.get('/jobs', async (req, res) => {
+    try {
+        // Fetch all jobs
+        const jobs = await Job.find();
+        res.json(jobs);
+    }   
+catch (error) {
+        console.error('Error fetching jobs:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+
+router.get('/team', async (req, res) => {
+    try {
+        const teamMembers = await TeamMember.find();
+        res.json(teamMembers);
+    } catch (error) {
+        console.error('Error fetching team members:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
 });
 
 

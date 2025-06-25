@@ -11,7 +11,7 @@ const AboutUs = () => {
     const fetchTeamMembers = async () => {
       try {
         setLoading(true);
-        const res = await api.get('/admin/team');
+        const res = await api.get('/team');
         setTeamMembers(res.data);
       } catch (err) {
         console.error("Failed to fetch team members:", err);

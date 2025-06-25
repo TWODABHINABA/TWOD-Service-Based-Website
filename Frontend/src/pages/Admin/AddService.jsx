@@ -13,6 +13,40 @@ const AddService = () => {
   const [serviceList, setServiceList] = useState([]);
   const [loading, setLoading] = useState(false);
 
+const token = localStorage.getItem('token');
+  const [isAdmin, setIsAdmin] = useState(false);
+  useEffect(() => {
+        if (!token) return;
+        const checkAdmin = async () => {
+            try {
+                const res = await api.get('/admin/me', {
+                    headers: {  
+                        Authorization: `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+                setIsAdmin(res.data.role === 'admin');
+            } catch (error) {
+                console.error('Failed to check admin status:', error);
+                setIsAdmin(false);
+            }
+        };
+        checkAdmin();
+    }, [token]);
+
+    useEffect(() => {
+    if (token && isAdmin) {
+      fetchServices();
+    }
+  }, [token, isAdmin]);
+
+    if (!token) {
+        return <div className="mt-20 text-center text-white" style={{ padding: "2rem", fontFamily: "Arial, sans-serif" }}>You must be logged in to view this page.</div>;
+    }
+
+    if (!isAdmin) {
+        return <div className="mt-20 text-center text-white" style={{ padding: "2rem", fontFamily: "Arial, sans-serif" }}>Only admin has access to this page.</div>;
+    }
+
   const fetchServices = async () => {
     try {
       setLoading(true);
@@ -25,9 +59,7 @@ const AddService = () => {
     }
   };
 
-  useEffect(() => {
-    fetchServices();
-  }, []);
+  
 
   const handleChange = (e) => {
     setServiceData({ ...serviceData, [e.target.name]: e.target.value });
