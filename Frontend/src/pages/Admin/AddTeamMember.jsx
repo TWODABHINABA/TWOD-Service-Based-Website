@@ -1,39 +1,65 @@
 import React, { useState, useEffect } from 'react';
+import api from '../../components/user-management/api';
 
 const AddTeamMember = () => {
   const [memberData, setMemberData] = useState({
     name: '',
     image: '',
-    speciality: '',
-    joiningDate: '',
-    linkedin: '',
+    skill: '',
+    available: false,
+    linkedinId: '',
   });
 
   const [teamList, setTeamList] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  // Optionally, fetch team members from backend if GET endpoint exists
+  const fetchTeam = async () => {
+    try {
+      setLoading(true);
+      const res = await api.get('/admin/team');
+      setTeamList(res.data);
+    } catch (err) {
+      console.error('Failed to fetch team:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem('teamList')) || [];
-    setTeamList(stored);
+    fetchTeam();
   }, []);
 
   const handleChange = (e) => {
-    setMemberData({ ...memberData, [e.target.name]: e.target.value });
+    const { name, value, type, checked } = e.target;
+    setMemberData({
+      ...memberData,
+      [name]: type === 'checkbox' ? checked : value,
+    });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const updatedList = [...teamList, memberData];
-    setTeamList(updatedList);
-    localStorage.setItem('teamList', JSON.stringify(updatedList));
-    alert('Team member added!');
-    setMemberData({ name: '', image: '', speciality: '', joiningDate: '', linkedin: '' });
+    try {
+      setLoading(true);
+      await api.post('/admin/newTeamMember', memberData);
+      alert('Team member added!');
+      setMemberData({ name: '', image: '', skill: '', available: false, linkedinId: '' });
+      // Optionally, fetchTeam();
+    } catch (err) {
+      alert('Failed to add team member.');
+      console.error('Error adding team member:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
+  // Note: No backend DELETE endpoint is defined, so just remove from UI for now
   const handleDelete = (index) => {
     const updated = [...teamList];
     updated.splice(index, 1);
     setTeamList(updated);
-    localStorage.setItem('teamList', JSON.stringify(updated));
+    // Optionally, implement backend delete if available
   };
 
   return (
@@ -67,38 +93,37 @@ const AddTeamMember = () => {
           </div>
 
           <div>
-            <label className="block mb-1 font-medium">Speciality</label>
+            <label className="block mb-1 font-medium">Skill</label>
             <input
               type="text"
-              name="speciality"
-              value={memberData.speciality}
+              name="skill"
+              value={memberData.skill}
               onChange={handleChange}
               className="w-full px-4 py-2 rounded bg-white/10 border border-white/30 outline-none"
               required
             />
           </div>
 
-          <div>
-            <label className="block mb-1 font-medium">Joining Date</label>
+          <div className="flex items-center gap-2">
             <input
-              type="date"
-              name="joiningDate"
-              value={memberData.joiningDate}
+              type="checkbox"
+              name="available"
+              checked={memberData.available}
               onChange={handleChange}
-              className="w-full px-4 py-2 rounded bg-white/10 border border-white/30 outline-none"
-              required
+              className="form-checkbox h-5 w-5 text-blue-600"
             />
+            <label className="font-medium">Available</label>
           </div>
 
           <div>
             <label className="block mb-1 font-medium">LinkedIn ID</label>
             <input
-              type="url"
-              name="linkedin"
-              value={memberData.linkedin}
+              type="text"
+              name="linkedinId"
+              value={memberData.linkedinId}
               onChange={handleChange}
               className="w-full px-4 py-2 rounded bg-white/10 border border-white/30 outline-none"
-              placeholder="https://linkedin.com/in/username"
+              placeholder="linkedin-username"
               required
             />
           </div>
@@ -106,8 +131,9 @@ const AddTeamMember = () => {
           <button
             type="submit"
             className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-6 rounded"
+            disabled={loading}
           >
-            Add Member
+            {loading ? 'Adding...' : 'Add Member'}
           </button>
         </form>
       </div>
@@ -128,11 +154,11 @@ const AddTeamMember = () => {
                 />
                 <div className="flex-1">
                   <h4 className="text-lg font-bold">{member.name}</h4>
-                  <p><strong>Speciality:</strong> {member.speciality}</p>
-                  <p><strong>Joining Date:</strong> {member.joiningDate}</p>
+                  <p><strong>Skill:</strong> {member.skill}</p>
+                  <p><strong>Available:</strong> {member.available ? 'Yes' : 'No'}</p>
                   <p>
                     <strong>LinkedIn:</strong>{' '}
-                    <a href={member.linkedin} target="_blank" rel="noopener noreferrer" className="text-blue-400 underline">
+                    <a href={`https://linkedin.com/in/${member.linkedinId}`} target="_blank" rel="noopener noreferrer" className="text-blue-400 underline">
                       View Profile
                     </a>
                   </p>
