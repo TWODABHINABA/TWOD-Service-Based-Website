@@ -1,14 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import '../App.css'; 
+import '../App.css';
+import api from '../components/user-management/api';
+import Toggle from './Toggle'
 
-import { useEffect } from 'react';
-import api from '../components/user-management/api'; 
 const Navbar = () => {
   const navigate = useNavigate();
   const [showDropdown, setShowDropdown] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [user, setUser] = useState(null);
+
+  // Dark mode toggle state
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    const stored = localStorage.getItem("theme");
+    if (stored) return stored === "dark";
+    return window.matchMedia("(prefers-color-scheme: dark)").matches;
+  });
+
+  useEffect(() => {
+    const root = window.document.documentElement;
+    if (isDarkMode) {
+      root.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      root.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  }, [isDarkMode]);
 
   const isLoggedIn = !!localStorage.getItem('token');
   const handleLogout = () => {
@@ -16,7 +34,6 @@ const Navbar = () => {
     navigate('/login');
   };
 
-   
   useEffect(() => {
     const fetchUser = async () => {
       const token = localStorage.getItem('token');
@@ -40,12 +57,11 @@ const Navbar = () => {
     };
     fetchUser();
   }, []);
-    
 
   return (
-    <div className="top-0 sm:top-2 md:top-4 z-40 fixed left-1/2 transform -translate-x-1/2 w-full sm:w-[90%] md:w-5/6 bg-[rgb(29_28_32/var(--tw-bg-opacity,1))] shadow-lg dark:bg-[#1D1C20] px-4 py-2 sm:rounded-lg flex items-center justify-between font-dmSans text-[#f4f4f5]">
+    <div className="top-0 sm:top-2 md:top-4 z-40 fixed left-1/2 transform -translate-x-1/2 w-full sm:w-[90%] md:w-5/6 bg-[rgb(29_28_32/var(--tw-bg-opacity,1))] shadow-lg dark:bg-[#1D1C20] px-4 py-2 sm:rounded-lg flex items-center justify-between font-dmSans text-[#f4f4f5] transition-colors duration-300">
 
-      {/* Logo - Larger */}
+      {/* Logo */}
       <div className="relative flex items-center">
         <div className="absolute inset-0 rounded-3xl blur-2xl opacity-100 bg-gradient-to-br from-secondary to-transparent scale-110 z-0"></div>
         <img
@@ -55,17 +71,21 @@ const Navbar = () => {
           onClick={() => navigate('/')}
         />
       </div>
-      
 
-
+      {/* Desktop Nav Links */}
       <ul className="hidden md:flex items-center gap-6 text-sm font-medium">
-        <NavLink to="/" className="hover:text-primary">HOME</NavLink>
-        <NavLink to="/aboutus" className="hover:text-primary">ABOUT US</NavLink>
-        <NavLink to="/services" className="hover:text-primary">SERVICES</NavLink>
-        <NavLink to="/contact" className="hover:text-primary">CONTACT US</NavLink>
+        <NavLink to="/" className="hover:text-gray-400">HOME</NavLink>
+        <NavLink to="/aboutus" className="hover:text-gray-400">ABOUT US</NavLink>
+        <NavLink to="/services" className="hover:text-gray-400">SERVICES</NavLink>
+        <NavLink to="/contact" className="hover:text-gray-400">CONTACT US</NavLink>
       </ul>
 
+      {/* Dark Mode Toggle (Desktop) */}
+      <div className="hidden md:block ">
+        <Toggle/>
+      </div>
 
+      {/* User Actions (Desktop) */}
       <div className="relative hidden md:block">
         {isLoggedIn ? (
           <div
@@ -91,8 +111,7 @@ const Navbar = () => {
                     <span className="text-primary font-bold">Admin Dashboard</span>
                   </p>
                 )}
-              
-                
+
                 <p
                   onClick={() => {
                     navigate('/myprofile');
@@ -108,12 +127,10 @@ const Navbar = () => {
                 >
                   Logout
                 </p>
-                
               </div>
             )}
           </div>
         ) : (
-
           <button
             onClick={() => navigate('/login')}
             className="btnlogin"
@@ -123,8 +140,16 @@ const Navbar = () => {
         )}
       </div>
 
-      {/* Mobile Menu Icon */}
+      {/* Mobile View: Dark Mode Toggle + Menu */}
       <div className="md:hidden flex items-center gap-4">
+        <button
+          onClick={() => setIsDarkMode(!isDarkMode)}
+          className="text-xl px-2 py-1 rounded-full border border-gray-300 dark:border-gray-600"
+          title={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
+        >
+          {isDarkMode ? "☀" : "🌙"}
+        </button>
+
         <button onClick={() => setShowMobileMenu(true)}>
           <img
             src="https://img.icons8.com/ios-filled/24/menu--v1.png"
@@ -136,7 +161,7 @@ const Navbar = () => {
 
       {/* Mobile Slide-out Menu */}
       {showMobileMenu && (
-        <div className="fixed inset-0 z-30 bg-white text-black px-6 py-4 md:hidden">
+        <div className="fixed inset-0 z-30 bg-white dark:bg-black text-black dark:text-white px-6 py-4 md:hidden transition-colors">
           <div className="flex justify-between items-center mb-6">
             <img
               src="https://i0.wp.com/thewallofdreams.com/wp-content/uploads/2025/03/logo_twod-removebg-preview.png?w=846&ssl=1"

@@ -62,7 +62,7 @@ const token = localStorage.getItem("token");
         
         
         <div className="p-8 space-y-6">
-          <h2 className="text-3xl font-bold text-primary">Contact Us</h2>
+          <h2 className="text-3xl font-bold text-black ">Contact Us</h2>
           <p className="text-gray-600">We'd love to hear from you. Fill out the form and we’ll get back to you shortly.</p>
           {submitted ? (
             <p className="text-green-600 font-medium">Thanks! Your message has been sent.</p>
@@ -110,6 +110,7 @@ const token = localStorage.getItem("token");
                 disabled={isSubmitting}
                 className="button"
                 type="submit"
+                
               >
                 <div className="outline"></div>
 
@@ -173,7 +174,7 @@ const token = localStorage.getItem("token");
         </div>
 
         
-        <div className="p-8 bg-primary text-white flex flex-col justify-between">
+        <div className="p-8 bg-violet-400 dark:bg-slate-400 text-black flex flex-col justify-between">
           <div className="space-y-6">
             <h3 className="text-2xl font-bold">Get in Touch</h3>
             <div className="flex items-center gap-4">
