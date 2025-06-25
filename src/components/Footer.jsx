@@ -5,8 +5,10 @@ import { FaPhoneAlt, FaLinkedin, FaInstagram } from "react-icons/fa";
 
 const Footer = () => {
   return (
-    <footer className="bg-gradient-to-br from-white via-white to-primary text-gray-800 py-12 px-6">
-      <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-12">
+    
+    <footer className="bg-gradient-to-br  text-white py-12 px-6 ">
+      <div className="w-full bg-white h-0.5 mb-4"></div>
+      <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-12 my-10">
         
         <div>
           <h1 className="text-2xl font-bold text-primary mb-4">The Wall of Dream</h1>
@@ -32,7 +34,7 @@ const Footer = () => {
 
        
         <div>
-          <h1 className="text-2xl font-bold text-primary mb-4">About Us</h1>
+          <h1 className="text-2xl font-bold text-white mb-4">About Us</h1>
           <div className="flex flex-col space-y-3 text-sm">
             <a href="#" className="hover:text-secondary">About</a>
             <a href="/career" className="hover:text-secondary">Careers</a>
