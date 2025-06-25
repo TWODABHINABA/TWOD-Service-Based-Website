@@ -1,46 +1,78 @@
 import React, { useState, useEffect } from 'react';
 import { FiTrash2 } from 'react-icons/fi'; // Import delete icon
+import api from '../../components/user-management/api';
 
 const AddJob = () => {
   const [jobData, setJobData] = useState({
-    name: '',
+    jobName: '',
     description: '',
-    skills: '',
+    skillsRequired: '',
     degree: '',
     perks: '',
+    location: '',
+    salaryRange: ''
   });
 
   const [jobList, setJobList] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  // Fetch jobs from backend
+  const fetchJobs = async () => {
+    try {
+      setLoading(true);
+      const res = await api.get('/admin/jobs');
+      setJobList(res.data);
+    } catch (err) {
+      console.error('Failed to fetch jobs:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const storedJobs = JSON.parse(localStorage.getItem('jobList')) || [];
-    setJobList(storedJobs);
+    fetchJobs();
   }, []);
 
   const handleChange = (e) => {
     setJobData({ ...jobData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const updatedJobs = [...jobList, jobData];
-    setJobList(updatedJobs);
-    localStorage.setItem('jobList', JSON.stringify(updatedJobs));
-    alert('Job added successfully!');
-    setJobData({
-      name: '',
-      description: '',
-      skills: '',
-      degree: '',
-      perks: '',
-    });
+    try {
+      setLoading(true);
+      // Convert skillsRequired and perks to arrays if they are not already
+      const payload = {
+        ...jobData,
+        skillsRequired: jobData.skillsRequired.split(',').map(s => s.trim()),
+        perks: jobData.perks ? jobData.perks.split(',').map(s => s.trim()) : [],
+      };
+      await api.post('/admin/newJob', payload);
+      alert('Job added successfully!');
+      setJobData({
+        jobName: '',
+        description: '',
+        skillsRequired: '',
+        degree: '',
+        perks: '',
+        location: '',
+        salaryRange: ''
+      });
+      fetchJobs();
+    } catch (err) {
+      alert('Failed to add job.');
+      console.error('Error adding job:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
+  // Note: No backend DELETE endpoint is defined, so just remove from UI for now
   const handleDelete = (index) => {
     const updatedJobs = [...jobList];
     updatedJobs.splice(index, 1);
     setJobList(updatedJobs);
-    localStorage.setItem('jobList', JSON.stringify(updatedJobs));
+    // Optionally, implement backend delete if available
   };
 
   return (
@@ -52,8 +84,8 @@ const AddJob = () => {
             <label className="block mb-2 font-semibold">Job Name</label>
             <input
               type="text"
-              name="name"
-              value={jobData.name}
+              name="jobName"
+              value={jobData.jobName}
               onChange={handleChange}
               className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/30 outline-none focus:ring-2 focus:ring-blue-500"
               required
@@ -76,8 +108,8 @@ const AddJob = () => {
             <label className="block mb-2 font-semibold">Required Skills</label>
             <input
               type="text"
-              name="skills"
-              value={jobData.skills}
+              name="skillsRequired"
+              value={jobData.skillsRequired}
               onChange={handleChange}
               className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/30 outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="e.g. React, Node, MongoDB"
@@ -93,6 +125,31 @@ const AddJob = () => {
               value={jobData.perks}
               onChange={handleChange}
               className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/30 outline-none focus:ring-2 focus:ring-blue-500"
+              required
+            />
+          </div>
+
+          <div className="col-span-1">
+            <label className="block mb-2 font-semibold">Location</label>
+            <input
+              type="text"
+              name="location"
+              value={jobData.location}
+              onChange={handleChange}
+              className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/30 outline-none focus:ring-2 focus:ring-blue-500"
+              required
+            />
+          </div>
+
+          <div className="col-span-1">
+            <label className="block mb-2 font-semibold">Salary Range</label>
+            <input
+              type="text"
+              name="salaryRange"
+              value={jobData.salaryRange}
+              onChange={handleChange}
+              className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/30 outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="e.g. 5-8 LPA"
               required
             />
           </div>
@@ -113,8 +170,9 @@ const AddJob = () => {
             <button
               type="submit"
               className="bg-blue-600 hover:bg-blue-700 transition duration-300 text-white py-3 px-8 rounded-lg text-lg font-semibold"
+              disabled={loading}
             >
-              Submit Job
+              {loading ? 'Submitting...' : 'Submit Job'}
             </button>
           </div>
         </form>
@@ -123,13 +181,15 @@ const AddJob = () => {
       {/* Job List */}
       <div className="mt-16">
         <h3 className="text-2xl font-bold mb-6">Job Listings</h3>
-        {jobList.length === 0 ? (
+        {loading ? (
+          <p className="text-gray-300">Loading...</p>
+        ) : jobList.length === 0 ? (
           <p className="text-gray-300">No jobs added yet.</p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {jobList.map((job, index) => (
               <div
-                key={index}
+                key={job._id || index}
                 className="bg-white/10 backdrop-blur-lg border border-white/20 p-6 rounded-xl shadow-md relative"
               >
                 <div className="absolute top-4 right-4">
@@ -140,15 +200,21 @@ const AddJob = () => {
                     title="Delete Job"
                   />
                 </div>
-                <h4 className="text-xl font-bold mb-2">{job.name}</h4>
+                <h4 className="text-xl font-bold mb-2">{job.jobName}</h4>
                 <p className="mb-1">
                   <span className="font-semibold">Degree:</span> {job.degree}
                 </p>
                 <p className="mb-1">
-                  <span className="font-semibold">Skills:</span> {job.skills}
+                  <span className="font-semibold">Skills:</span> {job.skillsRequired.join(', ')}
                 </p>
                 <p className="mb-1">
-                  <span className="font-semibold">Perks:</span> {job.perks}
+                  <span className="font-semibold">Perks:</span> {job.perks.join(', ')}
+                </p>
+                <p className="mb-1">
+                  <span className="font-semibold">Location:</span> {job.location}
+                </p>
+                <p className="mb-1">
+                  <span className="font-semibold">Salary Range:</span> {job.salaryRange}
                 </p>
                 <p className="mb-2">
                   <span className="font-semibold">Description:</span> {job.description}

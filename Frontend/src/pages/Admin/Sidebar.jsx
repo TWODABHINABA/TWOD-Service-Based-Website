@@ -5,6 +5,27 @@ const Sidebar = () => {
   return (
     <div className="min-h-screen bg-transparent border-r w-full sm:w-64 flex  pt-24 flex-col ">
       <ul className="text-white mt-5">
+      <NavLink
+          to="/client-requests"
+          className={({ isActive }) =>
+            `block py-3.5 px-6 cursor-pointer ${
+              isActive ? 'bg-[#F2F3FF] border-r-4 border-primary font-semibold' : ''
+            }`
+          }
+        >
+          Client Requests
+        </NavLink>
+        {/* add a service */}
+        <NavLink
+          to="/add-service"
+          className={({ isActive }) =>
+            `block py-3.5 px-6 cursor-pointer ${
+              isActive ? 'bg-[#F2F3FF] border-r-4 border-primary font-semibold' : ''
+            }`
+          }
+        >
+          Add Service
+        </NavLink>
 
         <NavLink
           to="/add-job"
@@ -39,7 +60,7 @@ const Sidebar = () => {
           Job Applications
         </NavLink>
 
-        <NavLink
+        {/* <NavLink
           to="/team-member-list"
           className={({ isActive }) =>
             `block py-3.5 px-6 cursor-pointer ${
@@ -48,7 +69,9 @@ const Sidebar = () => {
           }
         >
           Team Member List
-        </NavLink>
+        </NavLink> */}
+
+        
 
       </ul>
     </div>

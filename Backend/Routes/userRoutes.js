@@ -7,6 +7,7 @@ require('dotenv').config();
 const { isAuthenticated, isAdmin } = require('../utils/middleware');
 const passport = require("passport");
 require('../utils/passport');
+const Application = require('../Models/applications');
 
 
 router.use(passport.initialize());
@@ -119,6 +120,15 @@ router.get('/admin/me', isAuthenticated, isAdmin, async (req, res) => {
     return res.json(req.user);
   }
   res.status(401).json({ message: 'Unauthorized' });
+});
+
+
+
+router.post('/applications/new', async (req, res) => {
+  const { jobId, applicantId, resumeUrl, coverLetter } = req.body;
+  const newApplication = new Application({ jobId, applicantId, resumeUrl, coverLetter });
+  await newApplication.save();
+  res.status(201).json({ message: 'Application submitted successfully' });
 });
 
 
