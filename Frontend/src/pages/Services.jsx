@@ -32,7 +32,7 @@ const ServicesPage = () => {
     <div className="mt-20 min-h-screen px-4 md:px-24 lg:px-27 py-6">
       <Typography
         variant="h2"
-        className="mt-10 text-center mb-10 text-white font-bold"
+        className="mt-10 text-center mb-10 text-black dark:text-white font-bold"
       >
         Our Services
       </Typography>
