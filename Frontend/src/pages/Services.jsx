@@ -5,6 +5,7 @@ import {
   CardBody,
   CardFooter,
   Typography,
+  Button,
 } from "@material-tailwind/react";
 import api from '../components/user-management/api';
 
@@ -29,7 +30,7 @@ const ServicesPage = () => {
   }, []);
 
   return (
-    <div className="mt-20 min-h-screen px-4 md:px-24 lg:px-27 py-6">
+    <div className="mt-20 min-h-screen px-4 md:px-24 lg:px-28 py-6">
       <Typography
         variant="h2"
         className="mt-10 text-center mb-10 text-black dark:text-white font-bold"
@@ -42,21 +43,39 @@ const ServicesPage = () => {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
           {services.map((service, index) => (
-            <Card
-              key={index}
-              className="relative group flex flex-col items-center text-center p-4 rounded-xl max-w-sm bg-white/10 shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden"
-            >
-              <CardBody className="flex flex-col flex-grow group-hover:pb-10 transition-all duration-500 delay-200">
-                <div className="text-4xl mb-3 group-hover:scale-105 transition-all">{service.icon}</div>
-                <h1 className="font-semibold text-red-700 text-lg mb-1">{service.name}</h1>
-                {/* <p className="font-bold text-white text-xl mb-2">{service.price}</p> */}
-                <p className="text-gray-400 text-sm">{service.description}</p>
+            <Card key={index} className="w-96 bg-zinc-800 dark:bg-yellow-300 backdrop-blur rounded-xl shadow-xl p-4">
+              <CardBody>
+                <div className="text-5xl mb-4 text-white dark:text-blue-800">{service.icon || "✨"}</div>
+
+                <Typography variant="h5" color="blue-gray" className="mb-2 text-yellow-400 dark:text-blue-700">
+                  {service.name}
+                </Typography>
+
+                <Typography className="text-white dark:text-black text-sm">
+                  {service.description}
+                </Typography>
               </CardBody>
 
-              <CardFooter className="absolute -bottom-full group-hover:bottom-1 transition-all duration-500 delay-200 w-full flex justify-evenly">
-                <button className="px-4 py-2 text-white bg-red-700 rounded-full hover:bg-red-800 transition-all duration-300">
-                  Register now
-                </button>
+              <CardFooter className="pt-0">
+                <a href="#" className="inline-block">
+                  <Button size="sm" variant="text" className="text-bold flex items-center gap-2 text-white dark:text-white bg-indigo-500 shadow-lg shadow-indigo-500/50  border rounded-full transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110">
+                    Register
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={2}
+                      stroke="currentColor"
+                      className="h-4 w-4"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
+                      />
+                    </svg>
+                  </Button>
+                </a>
               </CardFooter>
             </Card>
           ))}
