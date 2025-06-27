@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import '../App.css';
 import api from '../components/user-management/api';
-import Toggle from './Toggle'
+import Toggle from './Toggle';
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -12,19 +12,19 @@ const Navbar = () => {
 
   // Dark mode toggle state
   const [isDarkMode, setIsDarkMode] = useState(() => {
-    const stored = localStorage.getItem("theme");
-    if (stored) return stored === "dark";
-    return window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const stored = localStorage.getItem('theme');
+    if (stored) return stored === 'dark';
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
   });
 
   useEffect(() => {
     const root = window.document.documentElement;
     if (isDarkMode) {
-      root.classList.add("dark");
-      localStorage.setItem("theme", "dark");
+      root.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
     } else {
-      root.classList.remove("dark");
-      localStorage.setItem("theme", "light");
+      root.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
     }
   }, [isDarkMode]);
 
@@ -59,11 +59,25 @@ const Navbar = () => {
   }, []);
 
   return (
-    <div className="top-0 sm:top-2 md:top-4 z-40 fixed left-1/2 transform -translate-x-1/2 w-full sm:w-[90%] md:w-5/6 bg-[rgb(29_28_32/var(--tw-bg-opacity,1))] shadow-lg dark:bg-[#1D1C20] px-4 py-2 sm:rounded-lg flex items-center justify-between font-dmSans text-[#f4f4f5] transition-colors duration-300">
-
+    <div
+      className="
+        fixed top-0 sm:top-2 md:top-4 left-1/2 transform -translate-x-1/2
+        w-full sm:w-[90%] md:w-5/6
+        bg-gradient-to-r from-[#D8B4FE] via-[#7C3AED] to-[#3B0A45]
+        shadow-xl dark:bg-[#1d1b26]
+        backdrop-blur-lg bg-white/30 dark:bg-[#1d1b26]/80
+        px-4 py-2 sm:rounded-xl
+        flex items-center justify-between
+        font-dmSans text-white dark:text-gray-200
+        transition-colors duration-300
+        z-40
+      "
+    >
       {/* Logo */}
       <div className="relative flex items-center">
-        <div className="absolute inset-0 rounded-3xl blur-2xl opacity-100 bg-gradient-to-br from-secondary to-transparent scale-110 z-0"></div>
+        {/* Glow behind logo for visibility */}
+        <div className="absolute inset-0 rounded-xl blur-2xl opacity-60 bg-white/20 dark:bg-white/10 z-0"></div>
+
         <img
           src="https://i0.wp.com/thewallofdreams.com/wp-content/uploads/2025/03/logo_twod-removebg-preview.png?w=846&ssl=1"
           alt="TWOD Logo"
@@ -74,15 +88,23 @@ const Navbar = () => {
 
       {/* Desktop Nav Links */}
       <ul className="hidden md:flex items-center gap-6 text-sm font-medium">
-        <NavLink to="/" className="hover:text-gray-400">HOME</NavLink>
-        <NavLink to="/aboutus" className="hover:text-gray-400">ABOUT US</NavLink>
-        <NavLink to="/services" className="hover:text-gray-400">SERVICES</NavLink>
-        <NavLink to="/contact" className="hover:text-gray-400">CONTACT US</NavLink>
+        <NavLink to="/" className="hover:text-gray-400">
+          HOME
+        </NavLink>
+        <NavLink to="/aboutus" className="hover:text-gray-400">
+          ABOUT US
+        </NavLink>
+        <NavLink to="/services" className="hover:text-gray-400">
+          SERVICES
+        </NavLink>
+        <NavLink to="/contact" className="hover:text-gray-400">
+          CONTACT US
+        </NavLink>
       </ul>
 
       {/* Dark Mode Toggle (Desktop) */}
-      <div className="hidden md:block ">
-        <Toggle/>
+      <div className="hidden md:block">
+        <Toggle />
       </div>
 
       {/* User Actions (Desktop) */}
@@ -99,16 +121,16 @@ const Navbar = () => {
             />
             <span>▼</span>
             {showDropdown && (
-              <div className="absolute right-0 mt-2 bg-white text-black shadow-md rounded-md p-3 z-10">
-                {user && user.role === "admin" && (
+              <div className="absolute right-0 mt-2 bg-white text-black shadow-md rounded-md p-3 z-10 min-w-[140px]">
+                {user && user.role === 'admin' && (
                   <p
                     onClick={() => {
                       navigate('/admin');
                       setShowDropdown(false);
                     }}
-                    className="cursor-pointer hover:text-primary mb-2"
+                    className="cursor-pointer hover:text-gray-600 mb-2 font-semibold text-black"
                   >
-                    <span className="text-primary font-bold">Admin Dashboard</span>
+                    Admin Dashboard
                   </p>
                 )}
 
@@ -117,13 +139,13 @@ const Navbar = () => {
                     navigate('/myprofile');
                     setShowDropdown(false);
                   }}
-                  className="cursor-pointer hover:text-primary mb-2"
+                  className="cursor-pointer hover:text-gray-600 mb-2"
                 >
                   My Profile
                 </p>
                 <p
                   onClick={handleLogout}
-                  className="cursor-pointer hover:text-primary"
+                  className="cursor-pointer hover:text-gray-600"
                 >
                   Logout
                 </p>
@@ -131,10 +153,7 @@ const Navbar = () => {
             )}
           </div>
         ) : (
-          <button
-            onClick={() => navigate('/login')}
-            className="btnlogin"
-          >
+          <button onClick={() => navigate('/login')} className="btnlogin">
             Log In
           </button>
         )}
@@ -145,9 +164,9 @@ const Navbar = () => {
         <button
           onClick={() => setIsDarkMode(!isDarkMode)}
           className="text-xl px-2 py-1 rounded-full border border-gray-300 dark:border-gray-600"
-          title={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
+          title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
         >
-          {isDarkMode ? "☀" : "🌙"}
+          {isDarkMode ? '☀' : '🌙'}
         </button>
 
         <button onClick={() => setShowMobileMenu(true)}>
@@ -177,13 +196,24 @@ const Navbar = () => {
             </button>
           </div>
           <ul className="flex flex-col gap-4 text-base font-medium">
-            <NavLink onClick={() => setShowMobileMenu(false)} to="/">HOME</NavLink>
-            <NavLink onClick={() => setShowMobileMenu(false)} to="/aboutus">ABOUT US</NavLink>
-            <NavLink onClick={() => setShowMobileMenu(false)} to="/services">SERVICES</NavLink>
-            <NavLink onClick={() => setShowMobileMenu(false)} to="/contact">CONTACT US</NavLink>
+            <NavLink onClick={() => setShowMobileMenu(false)} to="/">
+              HOME
+            </NavLink>
+            <NavLink onClick={() => setShowMobileMenu(false)} to="/aboutus">
+              ABOUT US
+            </NavLink>
+            <NavLink onClick={() => setShowMobileMenu(false)} to="/services">
+              SERVICES
+            </NavLink>
+            <NavLink onClick={() => setShowMobileMenu(false)} to="/contact">
+              CONTACT US
+            </NavLink>
             {isLoggedIn ? (
               <>
-                <NavLink onClick={() => setShowMobileMenu(false)} to="/myprofile">My Profile</NavLink>
+                <NavLink onClick={() => setShowMobileMenu(false)} to="/admin" className={`text-black`}  >Admin Dashboard</NavLink>
+                <NavLink onClick={() => setShowMobileMenu(false)} to="/myprofile">
+                  My Profile
+                </NavLink>
                 <p
                   className="cursor-pointer hover:text-primary"
                   onClick={() => {
