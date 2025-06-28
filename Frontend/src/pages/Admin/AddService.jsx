@@ -50,7 +50,7 @@ const token = localStorage.getItem('token');
   const fetchServices = async () => {
     try {
       setLoading(true);
-      const res = await api.get('/admin/services');
+      const res = await api.get('/services');
       setServiceList(res.data);
     } catch (err) {
       console.error('Failed to fetch services:', err);

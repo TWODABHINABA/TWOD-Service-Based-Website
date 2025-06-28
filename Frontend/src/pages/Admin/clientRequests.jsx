@@ -89,7 +89,7 @@ const ClientRequests = () => {
                   <p className="mt-2"><strong>Message:</strong></p>
                   <p className="text-gray-300">{request.message}</p>
                 </div>
-                {request.status !== 'accepted' && (
+                {request.status == 'pending' && (
                   <div className="flex flex-col gap-2">
                     <button
                       onClick={() => handleStatusUpdate(request._id, 'accept')}

@@ -55,7 +55,7 @@ const JobApplications = () => {
   
   const handleStatusChange = async (id, status) => {
     try {
-      await api.post(`/applications/${id}/status`, { status });
+      await api.post(`/admin/applications/${id}/status`, { status });
       alert(`Application status updated to ${status}`);
       fetchApplications(); // Refresh the list
     } catch (err) {
@@ -120,6 +120,8 @@ const JobApplications = () => {
                   </div>
                 </div>
                 <div className="flex flex-col gap-2">
+                  {app.status == 'pending' && (
+                    <div>
                   <button
                     onClick={() => handleStatusChange(app._id, 'accepted')}
                     className="bg-green-600 hover:bg-green-700 text-white px-4 py-1 rounded text-sm"
@@ -132,7 +134,10 @@ const JobApplications = () => {
                   >
                     Reject
                   </button>
+                  </div>
+                  )}
                 </div>
+                
               </div>
             </div>
           ))}

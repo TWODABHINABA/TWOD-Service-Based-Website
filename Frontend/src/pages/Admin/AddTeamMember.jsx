@@ -47,11 +47,11 @@ const AddTeamMember = () => {
         return <div className="mt-20 text-center text-white" style={{ padding: "2rem", fontFamily: "Arial, sans-serif" }}>Only admin has access to this page.</div>;
     }
 
-  // Optionally, fetch team members from backend if GET endpoint exists
+  // Fetch team members from backend
   const fetchTeam = async () => {
     try {
       setLoading(true);
-      const res = await api.get('/admin/team');
+      const res = await api.get('/team');
       setTeamList(res.data);
     } catch (err) {
       console.error('Failed to fetch team:', err);
@@ -63,10 +63,10 @@ const AddTeamMember = () => {
  
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value, type, checked, files } = e.target;
     setMemberData({
       ...memberData,
-      [name]: type === 'checkbox' ? checked : value,
+      [name]: type === 'checkbox' ? checked : type === 'file' ? files[0] : value,
     });
   };
 
@@ -74,10 +74,28 @@ const AddTeamMember = () => {
     e.preventDefault();
     try {
       setLoading(true);
-      await api.post('/admin/newTeamMember', memberData);
+      
+      // Create FormData for file upload
+      const formData = new FormData();
+      formData.append('name', memberData.name);
+      formData.append('skill', memberData.skill);
+      formData.append('available', memberData.available);
+      formData.append('linkedinId', memberData.linkedinId);
+      
+      if (memberData.image) {
+        formData.append('image', memberData.image);
+      }
+
+      await api.post('/admin/newTeamMember', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      
       alert('Team member added!');
       setMemberData({ name: '', image: '', skill: '', available: false, linkedinId: '' });
-      // Optionally, fetchTeam();
+      fetchTeam(); // Refresh the team list
     } catch (err) {
       alert('Failed to add team member.');
       console.error('Error adding team member:', err);
@@ -86,12 +104,20 @@ const AddTeamMember = () => {
     }
   };
 
-  // Note: No backend DELETE endpoint is defined, so just remove from UI for now
-  const handleDelete = (index) => {
-    const updated = [...teamList];
-    updated.splice(index, 1);
-    setTeamList(updated);
-    // Optionally, implement backend delete if available
+  // Delete team member from backend
+  const handleDelete = async (memberId) => {
+    try {
+      await api.delete(`/admin/team/${memberId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      fetchTeam(); // Refresh the team list
+      alert('Team member deleted successfully!');
+    } catch (err) {
+      alert('Failed to delete team member.');
+      console.error('Error deleting team member:', err);
+    }
   };
 
   return (
@@ -112,14 +138,13 @@ const AddTeamMember = () => {
           </div>
 
           <div>
-            <label className="block mb-1 font-medium">Image URL</label>
+            <label className="block mb-1 font-medium">Image</label>
             <input
-              type="url"
+              type="file"
               name="image"
-              value={memberData.image}
               onChange={handleChange}
               className="w-full px-4 py-2 rounded bg-white/10 border border-white/30 outline-none"
-              placeholder="https://example.com/image.jpg"
+              accept="image/*"
               required
             />
           </div>
@@ -177,10 +202,10 @@ const AddTeamMember = () => {
           <p className="text-gray-300">No team members added yet.</p>
         ) : (
           <ul className="space-y-6">
-            {teamList.map((member, index) => (
-              <li key={index} className="flex items-start gap-4 border border-white/20 p-4 rounded">
+            {teamList.map((member) => (
+              <li key={member._id} className="flex items-start gap-4 border border-white/20 p-4 rounded">
                 <img
-                  src={member.image}
+                  src={member.image.url}
                   alt={member.name}
                   className="w-20 h-20 object-cover rounded-full border"
                 />
@@ -190,12 +215,12 @@ const AddTeamMember = () => {
                   <p><strong>Available:</strong> {member.available ? 'Yes' : 'No'}</p>
                   <p>
                     <strong>LinkedIn:</strong>{' '}
-                    <a href={`https://linkedin.com/in/${member.linkedinId}`} target="_blank" rel="noopener noreferrer" className="text-blue-400 underline">
+                    <a href={`${member.linkedinId}`} target="_blank" rel="noopener noreferrer" className="text-blue-400 underline">
                       View Profile
                     </a>
                   </p>
                   <button
-                    onClick={() => handleDelete(index)}
+                    onClick={() => handleDelete(member._id)}
                     className="mt-2 bg-red-600 hover:bg-red-700 text-white px-4 py-1 rounded"
                   >
                     Delete
