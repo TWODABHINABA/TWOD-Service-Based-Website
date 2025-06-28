@@ -6,9 +6,9 @@ const developerSchema = new mongoose.Schema({
         required: true
     },
     image: {
-        type: String,
-        required: true
-    },
+        url: String,
+        filename: String
+      },
     skill: {
         type: String,
         required: true

@@ -67,7 +67,7 @@ const AboutUs = () => {
                 >
                   <img
                     src={
-                      member.image ||
+                      member.image.url ||
                       "https://png.pngtree.com/png-clipart/20230927/original/pngtree-man-avatar-image-for-profile-png-image_13001882.png"
                     }
                     alt={member.name}

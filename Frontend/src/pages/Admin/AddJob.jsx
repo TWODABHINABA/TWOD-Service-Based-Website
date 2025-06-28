@@ -55,7 +55,7 @@ if (!token) {
   const fetchJobs = async () => {
     try {
       setLoading(true);
-      const res = await api.get('/admin/jobs');
+      const res = await api.get('/jobs');
       setJobList(res.data);
     } catch (err) {
       console.error('Failed to fetch jobs:', err);
@@ -99,10 +99,16 @@ if (!token) {
   };
 
   // Note: No backend DELETE endpoint is defined, so just remove from UI for now
-  const handleDelete = (index) => {
+  const handleDelete = async (id, index) => {
+    console.log(index);
     const updatedJobs = [...jobList];
     updatedJobs.splice(index, 1);
     setJobList(updatedJobs);
+    console.log(updatedJobs);
+    const res = await api.delete(`/admin/jobs/${id}`);
+    console.log(res);
+
+    
     // Optionally, implement backend delete if available
   };
 
@@ -227,7 +233,7 @@ if (!token) {
                   <FiTrash2
                     className="text-red-500 hover:text-red-700 cursor-pointer"
                     size={22}
-                    onClick={() => handleDelete(index)}
+                    onClick={() => handleDelete(job._id, index)}
                     title="Delete Job"
                   />
                 </div>
