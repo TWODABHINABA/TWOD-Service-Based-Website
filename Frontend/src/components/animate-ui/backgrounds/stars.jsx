@@ -102,7 +102,7 @@ function StarsBackground({
       : 'bg-white';
 
   // Star colors (white stars on dark bg, black stars on light bg)
-  const starColor = theme === 'dark' ? '#ffffff' : '#000000';
+  const starColor = theme === 'dark' ? 'white' : 'black';
 
   // Parallax movement based on mouse position relative to center
   const handleMouseMove = React.useCallback(
