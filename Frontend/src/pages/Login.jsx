@@ -100,7 +100,7 @@ const Login = () => {
 
         <button
           type="submit"
-          className="bg-primary text-white w-full rounded-md text-base py-2"
+          className="bg-black text-white  w-full rounded-md text-base py-2"
           onClick={state === 'Sign Up' ? handleSignUp : handleLogin}
         >
           {state === 'Sign Up' ? 'Create Account' : 'Login'}
@@ -108,14 +108,14 @@ const Login = () => {
 
         <button
           type="button"
-          className="bg-primary text-white w-full rounded-md text-base py-2"
+          className="bg-black text-white w-full rounded-md text-base py-2"
           onClick={handleGoogleLogin}
         >
           Login with Google
         </button>
         <button
           type="button"
-          className="bg-primary text-white w-full rounded-md text-base py-2"
+          className="bg-black text-white w-full rounded-md text-base py-2"
           onClick={handleGithubLogin}
         >
           Login with Github
@@ -136,7 +136,7 @@ const Login = () => {
             Create a new Account{' '}
             <span
               onClick={() => setState('Sign Up')}
-              className="text-primary underline cursor-pointer"
+              className="text-blue-600 underline cursor-pointer"
             >
               Click Here
             </span>

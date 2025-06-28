@@ -98,8 +98,8 @@ function StarsBackground({
   // Background gradient based on theme
   const backgroundStyle =
     theme === 'dark'
-      ? 'bg-[radial-gradient(ellipse_at_bottom,_#262626_0%,_#000000_100%)]'
-      : 'bg-[radial-gradient(ellipse_at_bottom,_#ffffff_0%,_#e0e0e0_100%)]';
+      ? 'bg-black'
+      : 'bg-white';
 
   // Star colors (white stars on dark bg, black stars on light bg)
   const starColor = theme === 'dark' ? '#ffffff' : '#000000';

@@ -19,6 +19,7 @@ import JobApplications from './pages/Admin/JobApplications';
 import TeamMemberList from './pages/Admin/TeamMemberList';
 import ClientRequests from './pages/Admin/clientRequests';
 import AddService from './pages/Admin/AddService';
+import Register from './pages/Register';
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -61,6 +62,7 @@ const App = () => {
           <Route path="/services" element={<Services />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/career" element={<CareerPage user={user} />} />
+          <Route path="/register/:id" element={<Register/>}   />
           <Route path="/admin" element={<Sidebar />} />
           <Route path="/add-job" element={<AddJob />} />
           <Route path="/add-team-member" element={<AddTeamMember />} />
