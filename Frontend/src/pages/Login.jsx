@@ -27,7 +27,7 @@ const Login = () => {
       });
 
       localStorage.setItem('token', res.data.token);
-      navigate('/');
+      setState("Login");
     } catch (err) {
       alert(err.response?.data?.message || 'Signup failed');
     }
@@ -48,12 +48,12 @@ const Login = () => {
     }
   };
 
-  useEffect(() => {
-    const token = localStorage.getItem('dummyToken');
-    if (token) {
-      navigate('/');
-    }
-  }, []);
+  // useEffect(() => {
+  //   const token = localStorage.getItem('dummyToken');
+  //   if (token) {
+  //     navigate('/');
+  //   }
+  // }, []);
 
   return (
     <form className="min-h-screen flex items-center justify-center pt-24 px-4">
