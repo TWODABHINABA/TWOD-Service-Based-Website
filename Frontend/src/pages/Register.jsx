@@ -1,88 +1,77 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { StarsBackground } from "../components/animate-ui/backgrounds/stars";
 import { AiFillStar } from "react-icons/ai";
-
-// Mock service data
-const mockServiceData = {
-  "1": {
-    name: "Web Development",
-    description: "Build fast, responsive websites and applications.",
-  },
-  "2": {
-    name: "Graphic Design",
-    description: "Creative logos, banners, and social media posts.",
-  },
-};
-
-// Mock feedback data
-const mockFeedbackData = {
-  "1": [
-    {
-      name: "Rishi",
-      rating: 5,
-      comment: "Fantastic work and timely delivery!",
-    },
-    {
-      name: "Aditya",
-      image: "https://i.pravatar.cc/50?img=2",
-      rating: 4,
-      comment: "Good quality, would recommend.",
-    },
-  ],
-  "2": [
-    {
-      name: "Mohit Raj",
-      image: "https://i.pravatar.cc/50?img=6",
-      rating: 5,
-      comment: "Awesome design skills!",
-    },
-    {
-      name: "Sneha Kapoor",
-      image: "https://i.pravatar.cc/50?img=7",
-      rating: 3,
-      comment: "Decent work, communication could improve.",
-    },
-  ],
-};
+import api from "../components/user-management/api";
 
 const RegisterPage = () => {
   const { id } = useParams();
   const [service, setService] = useState(null);
-  const [feedbacks, setFeedbacks] = useState([]);
   const [newRating, setNewRating] = useState(5);
   const [newComment, setNewComment] = useState("");
   const [newName, setNewName] = useState("");
-  const [newImage, setNewImage] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const navigate = useNavigate();
+  const fetchService = async () => {
+    try {
+      setLoading(true);
+      const response = await api.get(`/services/${id}`);
+      setService(response.data);
+      setError(null);
+    } catch (err) {
+      setError("Failed to fetch service data. Please try again later.");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const selectedService = mockServiceData[id];
-    const selectedFeedbacks = mockFeedbackData[id] || [];
-
-    if (selectedService) {
-      setService(selectedService);
-      setFeedbacks(selectedFeedbacks);
-    }
+    fetchService();
   }, [id]);
 
-  const handleSubmit = () => {
-    const newFeedback = {
-      name: newName || "Anonymous",
-      image: newImage || "https://i.pravatar.cc/50",
-      rating: newRating,
-      comment: newComment,
-    };
+  const handleSubmit = async () => {
+    try {
+      const newFeedback = {
+        name: newName || "Anonymous",
+        stars: newRating,
+        message: newComment,
+      };
 
-    setFeedbacks((prev) => [...prev, newFeedback]);
-    setNewRating(5);
-    setNewComment("");
-    setNewName("");
-    setNewImage("");
+      await api.post(`/services/${id}/feedback`, newFeedback);
 
-    navigate("/");
+      setNewRating(5);
+      setNewComment("");
+      setNewName("");
+      // Refetch service to show new feedback
+      fetchService();
+
+    } catch (error) {
+        console.error("Failed to submit feedback", error)
+        setError("Failed to submit feedback. Please try again later.");
+    }
   };
+
+  if (loading) {
+    return (
+      <StarsBackground>
+        <div className="min-h-screen flex items-center justify-center text-white">
+          Loading...
+        </div>
+      </StarsBackground>
+    );
+  }
+
+  if (error) {
+    return (
+      <StarsBackground>
+        <div className="min-h-screen flex items-center justify-center text-red-500">
+          {error}
+        </div>
+      </StarsBackground>
+    );
+  }
 
   return (
     <StarsBackground>
@@ -99,9 +88,9 @@ const RegisterPage = () => {
         <div className="mb-10 bg-white/10 dark:bg-black/20 p-6 rounded-2xl shadow-lg">
           <h3 className="text-2xl font-semibold mb-6">Client Feedback</h3>
 
-          {feedbacks.length > 0 ? (
+          {service && service.feedback && service.feedback.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {feedbacks.map((fb, i) => (
+              {service.feedback.map((fb, i) => (
                 <div
                   key={i}
                   className="p-4 rounded-xl bg-white/20 dark:bg-black/30  flex items-start gap-4"
@@ -116,11 +105,11 @@ const RegisterPage = () => {
                       {fb.name || "Anonymous"}
                     </h4>
                     <div className="flex items-center mb-1">
-                      {[...Array(fb.rating)].map((_, i) => (
+                      {[...Array(fb.stars)].map((_, i) => (
                         <AiFillStar key={i} className="text-yellow-400 text-lg" />
                       ))}
                     </div>
-                    <p className="text-gray-700 dark:text-gray-300">{fb.comment}</p>
+                    <p className="text-gray-700 dark:text-gray-300">{fb.message}</p>
                   </div>
                 </div>
               ))}
@@ -140,14 +129,6 @@ const RegisterPage = () => {
             value={newName}
             onChange={(e) => setNewName(e.target.value)}
             className="mb-2 p-2 w-full rounded text-black"
-          />
-
-          <input
-            type="text"
-            placeholder="Profile image URL (optional)"
-            value={newImage}
-            onChange={(e) => setNewImage(e.target.value)}
-            className="mb-4 p-2 w-full rounded text-black"
           />
 
           <div className="flex items-center mb-4">
