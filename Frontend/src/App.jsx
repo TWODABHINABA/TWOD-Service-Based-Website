@@ -20,6 +20,8 @@ import TeamMemberList from './pages/Admin/TeamMemberList';
 import ClientRequests from './pages/Admin/clientRequests';
 import AddService from './pages/Admin/AddService';
 import Register from './pages/Register';
+import {Toaster} from "react-hot-toast"
+import AutoLogout from './AutoLogout';
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -53,6 +55,8 @@ const App = () => {
       {showStars && (
         <StarsBackground className="z-0 fixed inset-0 pointer-events-none" />
       )}
+      <Toaster position='top-right'/>
+      <AutoLogout/>
       <div className="relative z-10">
         <Navbar user={user} />
         <Routes>

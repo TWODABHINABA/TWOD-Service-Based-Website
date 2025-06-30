@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../components/user-management/api';
+import toast from 'react-hot-toast';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -27,9 +28,11 @@ const Login = () => {
       });
 
       localStorage.setItem('token', res.data.token);
+      toast.success("Register sucessfull")
       setState("Login");
     } catch (err) {
-      alert(err.response?.data?.message || 'Signup failed');
+      const error=err.response?.data?.message || 'Signup failed'
+      toast.error(error)
     }
   };
 
@@ -42,6 +45,7 @@ const Login = () => {
       });
 
       localStorage.setItem('token', res.data.token);
+      toast.success("Login sucessfull")
       navigate('/');
     } catch (err) {
       alert(err.response?.data?.message || 'Login failed');
