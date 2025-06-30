@@ -9,6 +9,7 @@ const adminRoutes = require("./Routes/adminRoutes");
 require("dotenv").config()
 
 const db = require("./utils/db");
+const compression = require("compression");
 
 const app=express();
 
@@ -31,6 +32,7 @@ app.use(
 );
 
 app.use(express.json());
+app.use(compression());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
