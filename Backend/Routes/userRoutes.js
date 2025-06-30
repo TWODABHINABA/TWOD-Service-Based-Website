@@ -144,6 +144,43 @@ router.get('/services',  async (req, res) => {
     }
 });
 
+router.get('/services/:id', async (req, res) => {
+    try {
+        const service = await Service.findById(req.params.id);
+        if (!service) {
+            return res.status(404).json({ message: 'Service not found' });
+        }
+        res.json(service);
+    } catch (error) {
+        console.error('Error fetching service:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+router.post('/services/:id/feedback', async (req, res) => {
+    try {
+        const service = await Service.findById(req.params.id);
+        if (!service) {
+            return res.status(404).json({ message: 'Service not found' });
+        }
+
+        const { name, stars, message } = req.body;
+        const newFeedback = {
+            name: name || 'Anonymous',
+            stars,
+            message
+        };
+
+        service.feedback.push(newFeedback);
+        await service.save();
+
+        res.status(201).json(service);
+    } catch (error) {
+        console.error('Error adding feedback:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
 router.get('/jobs', async (req, res) => {
     try {
         // Fetch all jobs
