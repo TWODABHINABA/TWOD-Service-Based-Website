@@ -10,11 +10,11 @@ const Login = () => {
   const [name, setName] = useState('');
 
   const handleGoogleLogin = () => {
-    window.location.href = 'http://localhost:6001/auth/google';
+    window.location.href = 'https://twod-service-based-website-backend.onrender.com/auth/google';
   };
 
   const handleGithubLogin = () => {
-    window.location.href = 'http://localhost:6001/auth/github';
+    window.location.href = 'https://twod-service-based-website-backend.onrender.com/auth/github';
   };
 
   const handleSignUp = async (event) => {

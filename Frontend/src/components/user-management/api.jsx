@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:6001";
+const API_URL = window.location.hostname?"http://localhost:6001" : "https://twod-service-based-website-backend.onrender.com";
   
 
 const api = axios.create({
