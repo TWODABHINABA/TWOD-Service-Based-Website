@@ -95,9 +95,9 @@ const Contact = () => {
                 ></textarea>
 
                 <button disabled={isSubmitting} className="button" type="submit">
-                  <div className="outline"></div>
+                  <div className="outline bg-purple-500 dark:bg-gray-600"></div>
                   {!submitted ? (
-                    <div className="state state--default">
+                    <div className="state state--default text-white ">
                       <div className="icon"></div>
                       <p>
                         {"Send Message".split("").map((char, i) => (
