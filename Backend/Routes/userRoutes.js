@@ -27,7 +27,7 @@ router.get('/auth/google/callback',
   (req, res) => {
     // Google login successful
     const token = jwt.sign({ id: req.user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    res.redirect(`http://localhost:5173?token=${token}`);
+    res.redirect(`https://twod-service-based-website.vercel.app?token=${token}`);
   }
 );
 
@@ -58,7 +58,7 @@ router.get('/auth/github/callback',
   (req, res) => {
     // GitHub login successful
     const token = jwt.sign({ id: req.user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    res.redirect(`http://localhost:5173?token=${token}`);
+    res.redirect(`https://twod-service-based-website.vercel.app?token=${token}`);
   }
 );
 // Optional: GitHub Auth Success (only if frontend fetches token after login)
