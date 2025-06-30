@@ -1,72 +1,76 @@
 'use client';
 import React from 'react';
-import { StarsBackground } from './animate-ui/backgrounds/stars'; 
+import { StarsBackground } from './animate-ui/backgrounds/stars';
+import { FaUserFriends, FaRegClock, FaCode } from 'react-icons/fa';
 
 const About = () => {
   return (
-    <StarsBackground className="py-18">
-      <div className="max-w-6xl mx-auto px-4 flex flex-col lg:flex-row items-center gap-12 relative z-10">
+    <StarsBackground className="py-16">
+      <div className="max-w-6xl mx-auto px-6 md:px-10 relative z-10 space-y-24">
 
-        {/* Logo Section */}
-        <div className="w-full lg:w-1/2 flex justify-center">
-          <div className="relative">
-            <div className="absolute inset-0 rounded-3xl blur-2xl opacity-60 bg-gradient-to-br from-secondary to-transparent scale-110 z-0"></div>
-            <img
-              src="https://i0.wp.com/thewallofdreams.com/wp-content/uploads/2025/03/logo_twod-removebg-preview.png?w=846&ssl=1"
-              alt="TWOD Logo"
-              className="w-64 sm:w-80 lg:w-96 relative z-10 drop-shadow-[0_4px_32px_rgba(255,255,255,0.4)]"
-            />
-          </div>
-        </div>
-
-        {/* Text Section */}
-        <div className="w-full lg:w-1/2 space-y-8">
-          <div>
-            <h1 className="text-4xl font-extrabold text-primary relative inline-block text-black dark:text-white">
-              Our Story
-              <span className="block w-25 h-1 bg-secondary mt-2 rounded-full"></span>
+        {/* Hero Row */}
+        <div className="flex flex-col-reverse lg:flex-row items-center gap-16">
+          {/* Text Section */}
+          <div className="w-full lg:w-1/2 space-y-8">
+            <h1 className="text-5xl font-extrabold text-black dark:text-white leading-tight">
+              Empowering Digital Journeys with <span className="text-purple-600 dark:text-purple-500">TWOD</span>
             </h1>
-            <p className="text-lg leading-relaxed mt-4 text-black dark:text-white">
-              Welcome to <strong className="text-black dark:text-white">TWOD</strong>, your trusted partner for accessible and personalized web solutions.
-              We blend design and development with creativity and performance to bring your digital dreams to life.
-              Whether you're a business, startup, or visionary individual — we're here to make your online journey seamless.
+            <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
+              At <strong>TWOD</strong>, we build intuitive, performance-driven web experiences that connect ideas with innovation. From startups to enterprises, we turn bold visions into high-impact realities.
             </p>
           </div>
 
-          <div>
-            <h3 className="text-2xl font-bold text-black dark:text-white mb-6">How We Help</h3>
-            <div className="space-y-6">
+          {/* Image Section */}
+          <div className="w-full lg:w-1/2 flex justify-center">
+            <div className="relative bg-white dark:bg-white backdrop-blur-md border border-white/20 rounded-3xl p-6 shadow-xl">
+              <div className="absolute -inset-1 rounded-3xl blur-3xl bg-gradient-to-br from-secondary to-purple-600 opacity-50 scale-110 z-0" />
+              <img
+                src="https://i0.wp.com/thewallofdreams.com/wp-content/uploads/2025/03/logo_twod-removebg-preview.png?w=846&ssl=1"
+                alt="TWOD Logo"
+                className="relative z-10 w-64 sm:w-72 md:w-80 drop-shadow-[0_4px_24px_rgba(255,255,255,0.3)]"
+              />
+            </div>
+          </div>
+        </div>
 
-              <div className="flex items-start gap-4">
-                <span className="text-2xl text-black dark:text-white">➜</span>
-                <div>
-                  <h4 className="text-xl font-semibold text-black dark:text-white">Choose a Specialist</h4>
-                  <p className="text-black dark:text-white mt-1 text-lg">
-                    Work with our experienced designers, developers, or strategists — handpicked for your goals.
-                  </p>
-                </div>
+        {/* Features Section */}
+        <div className="space-y-12">
+          <h2 className="text-4xl font-bold text-center text-black dark:text-white">
+            What We Offer
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+            
+            {/* Feature 1 */}
+            <div className="bg-white dark:bg-white/5 border border-white/10 backdrop-blur-md rounded-2xl p-6 text-center shadow-md hover:shadow-xl transition-all duration-300 dark:border-white border-black">
+              <div className="text-secondary text-3xl mb-4 mx-auto w-fit p-3 rounded-full bg-black dark:bg-white">
+                <FaUserFriends />
               </div>
+              <h4 className="text-lg font-semibold text-black dark:text-white mb-2">Expert Collaboration</h4>
+              <p className="text-gray-700 dark:text-gray-300 text-sm">
+                Work directly with top-tier designers, developers, and thinkers who care about your success.
+              </p>
+            </div>
 
-              <div className="flex items-start gap-4">
-                <span className="text-2xl text-black dark:text-white">➜</span>
-                <div>
-                  <h4 className="text-xl font-semibold text-black dark:text-white">Make a Schedule</h4>
-                  <p className="text-black dark:text-white mt-1 text-lg">
-                    Flexible milestones and collaborative planning keep your project on track and transparent.
-                  </p>
-                </div>
+            {/* Feature 2 */}
+            <div className="bg-white dark:bg-white/5 border border-white/10 backdrop-blur-md rounded-2xl p-6 dark:border-white border-black text-center shadow-md hover:shadow-xl transition-all duration-300">
+              <div className="text-secondary text-3xl mb-4 mx-auto w-fit p-3 rounded-full bg-black dark:bg-white">
+                <FaRegClock />
               </div>
+              <h4 className="text-lg font-semibold text-black dark:text-white mb-2">Seamless Scheduling</h4>
+              <p className="text-gray-700 dark:text-gray-300 text-sm">
+                Stay on track with flexible planning, well-defined sprints, and transparent progress.
+              </p>
+            </div>
 
-              <div className="flex items-start gap-4">
-                <span className="text-2xl text-secondary">➜</span>
-                <div>
-                  <h4 className="text-xl font-semibold text-black dark:text-white">Get Your Website</h4>
-                  <p className="text-black dark:text-white mt-1 text-lg">
-                    Launch a responsive, high-performing website that reflects your vision and drives results.
-                  </p>
-                </div>
+            {/* Feature 3 */}
+            <div className="bg-white dark:bg-white/5 border border-white/10 backdrop-blur-md rounded-2xl p-6 dark:border-white border-black text-center shadow-md hover:shadow-xl transition-all duration-300">
+              <div className="text-secondary text-3xl mb-4 mx-auto w-fit p-3 rounded-full bg-black dark:bg-white">
+                <FaCode />
               </div>
-
+              <h4 className="text-lg font-semibold text-black dark:text-white mb-2">Impactful Delivery</h4>
+              <p className="text-gray-700 dark:text-gray-300 text-sm">
+                Launch beautiful, performant websites and apps that resonate with users and drive results.
+              </p>
             </div>
           </div>
         </div>
