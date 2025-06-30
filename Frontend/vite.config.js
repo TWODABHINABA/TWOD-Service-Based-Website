@@ -8,7 +8,7 @@ export default defineConfig({
   server:{
     proxy:{
       "/api":{
-        target: local? "https://twod-service-based-website-backend.onrender.com":"https://localhost:6001",
+        target: local ? "http://localhost:6001" : "https://twod-service-based-website-backend.onrender.com",
         changeOrigin: true,
         secure: false,
       }

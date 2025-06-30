@@ -1,6 +1,10 @@
 import axios from "axios";
 
-const API_URL = window.location.hostname?"http://localhost:6001" : "https://twod-service-based-website-backend.onrender.com";
+const isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
+const API_URL = isLocal
+  ? "http://localhost:6001"
+  : "https://twod-service-based-website-backend.onrender.com";
+
   
 
 const api = axios.create({
