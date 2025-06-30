@@ -2,7 +2,7 @@
 .button {
   --primary: #4f46e5;
   --neutral-1: #ffffff;
-  --neutral-2: #f3f4f6;
+  --neutral-2: black;
   --radius: 16px;
 
   cursor: pointer;

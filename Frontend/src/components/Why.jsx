@@ -43,7 +43,7 @@ const Why = () => {
   }, []);
 
   const titleClass = isDay ? 'text-black' : 'text-white';
-  const paragraphClass = isDay ? 'text-gray-800' : 'text-gray-400';
+  // const paragraphClass = isDay ? 'text-black' : 'text-white';
   const cardTextColor = isDay ? 'text-black' : 'text-white';
   const cardBackground = isDay
     ? 'bg-gradient-to-br from-gray-100 via-gray-200 to-gray-300'
@@ -59,7 +59,7 @@ const Why = () => {
         <h1 className={`text-4xl font-extrabold mb-4 text-gray-900 dark:text-white ${titleClass}`}>
           Why Choose Our TWOD Services
         </h1>
-        <p className={`text-lg mb-10 ${paragraphClass}`}>
+        <p className="text-lg mb-10 text-black dark:text-white">
           At TWOD (The Walls of Dream), we go beyond just building websites. We help you create a powerful digital presence that drives results.
         </p>
 

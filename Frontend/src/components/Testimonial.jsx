@@ -183,7 +183,7 @@ const Testimonial = () => {
               <div key={index}>
                 <div
                   ref={(el) => (cardsRef.current[index] = el)}
-                  className="bg-black bg-opacity-10 border-4 border-white rounded-2xl m-4 p-6 my-10 relative shadow-[0_4px_24px_0_rgba(255,255,255,0.5)]"
+                  className="bg-black dark:bg-white  border-4 border-black dark:border-white rounded-2xl m-4 p-6 my-10 relative shadow-[0_4px_24px_0_rgba(255,255,255,0.5)]"
                 >
                   <div className="absolute top-[-45px] left-6">
                     <img
@@ -194,13 +194,13 @@ const Testimonial = () => {
                       className="rounded-full border-4 border-white shadow-[0_2px_12px_0_rgba(255,255,255,0.5)]"
                     />
                   </div>
-                  <div className="bg-opacity-90 clint-card">
+                  <div className="bg-opacity-90 clint-card flex  pr-10">
                     <div className="clint-card-details">
-                      <h4 className="text-base font-normal text-white mt-8 mb-4">{item.comment}</h4>
+                      <h4 className="text-base font-normal text-white dark:text-black mt-8 mb-4">{item.comment}</h4>
                       <div className="flex justify-between items-center">
                         <div>
-                          <h3 className="text-lg font-semibold text-white">{item.name}</h3>
-                          <p className="text-sm text-gray-300">{item.profession}</p>
+                          <h3 className="text-lg font-semibold text-white dark:text-black">{item.name}</h3>
+                          <p className="text-sm text-white dark:text-black">{item.profession}</p>
                         </div>
                         <div className="flex">{renderStars(item.rating)}</div>
                       </div>
