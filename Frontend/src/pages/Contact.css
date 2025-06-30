@@ -1,7 +1,7 @@
 /* From Uiverse.io by 00Kubi */ 
 .button {
-  --primary: #4f46e5;
-  --neutral-1: #ffffff;
+  --primary: #605e93;
+  --neutral-1: rgb(105, 139, 180);
   --neutral-2: black;
   --radius: 16px;
 
@@ -18,9 +18,9 @@
   justify-content: center;
   position: relative;
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  min-width: 220px;
+  min-width: 50px;
   padding: 22px;
-  height: 72px;
+  height: 50px;
   font-family: "Inter", system-ui, sans-serif;
   font-style: normal;
   font-size: 19px;

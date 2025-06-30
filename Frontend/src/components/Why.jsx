@@ -42,7 +42,7 @@ const Why = () => {
     });
   }, []);
 
-  const titleClass = isDay ? 'text-black' : 'text-white';
+  // const titleClass = isDay ? 'text-black' : 'text-white';
   // const paragraphClass = isDay ? 'text-black' : 'text-white';
   const cardTextColor = isDay ? 'text-black' : 'text-white';
   const cardBackground = isDay
@@ -56,7 +56,7 @@ const Why = () => {
   return (
     <div ref={sectionRef} className="py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto text-center">
-        <h1 className={`text-4xl font-extrabold mb-4 text-gray-900 dark:text-white ${titleClass}`}>
+        <h1 className={`text-4xl font-extrabold mb-4 text-black dark:text-white `}>
           Why Choose Our TWOD Services
         </h1>
         <p className="text-lg mb-10 text-black dark:text-white">
