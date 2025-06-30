@@ -87,7 +87,7 @@ router.post('/api/signup', async (req, res) => {
     if (userExist) return res.status(400).json({ message: 'User already exists' });
 
     const user = await User.create({ name, email, password });
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '30s' });
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '20h' });
     res.json({ token });
   } catch (err) {
     res.status(500).json({ message: 'Server error' });
@@ -103,7 +103,7 @@ router.post('/api/login', async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ message: 'Invalid credentials password' });
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '30s' });
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '20h' });
     res.json({ token });
   } catch (err) {
     res.status(500).json({ message: 'Server error' });
