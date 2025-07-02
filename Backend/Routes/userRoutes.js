@@ -11,6 +11,10 @@ const Application = require('../Models/applications');
 const Job = require('../Models/jobs');
 const Service = require('../Models/services');
 const TeamMember = require('../Models/developers');
+const { storage } = require('../utils/clodinaryConfig');
+const multer = require('multer');
+const upload = multer({ storage });
+const sendEmail = require('../utils/emailService');
 
 
 router.use(passport.initialize());
@@ -28,6 +32,7 @@ router.get('/auth/google/callback',
     // Google login successful
     const token = jwt.sign({ id: req.user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
     res.redirect(`https://twod-service-based-website.vercel.app?token=${token}`);
+    // res.redirect(`http://localhost:5173?token=${token}`);
   }
 );
 
@@ -59,6 +64,7 @@ router.get('/auth/github/callback',
     // GitHub login successful
     const token = jwt.sign({ id: req.user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
     res.redirect(`https://twod-service-based-website.vercel.app?token=${token}`);
+    // res.redirect(`http://localhost:5173?token=${token}`);
   }
 );
 // Optional: GitHub Auth Success (only if frontend fetches token after login)
@@ -79,14 +85,14 @@ router.get('/auth/github/failure', (req, res) => {
 
 
 // Signup Route
-router.post('/api/signup', async (req, res) => {
+router.post('/api/signup', upload.single('image'), async (req, res) => {
   const { name, email, password } = req.body;
 
   try {
     const userExist = await User.findOne({ email });
     if (userExist) return res.status(400).json({ message: 'User already exists' });
 
-    const user = await User.create({ name, email, password });
+    const user = await User.create({ name, email, password, image: { url: req.file.path, filename: req.file.filename }   });
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '20h' });
     res.json({ token });
   } catch (err) {
@@ -108,6 +114,30 @@ router.post('/api/login', async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: 'Server error' });
   }
+});
+
+router.post('/forgot-password', async (req, res) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+  if (!user) return res.status(400).json({ message: 'User not found' });
+  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+  const resetLink = `https://twod-service-based-website.vercel.app/reset-password/${token}`;
+  // const resetLink = `http://localhost:5173/reset-password/${token}`;
+  console.log(resetLink);   
+  await sendEmail(email, resetLink);
+  res.json({ token });
+});
+
+router.post('/reset-password/:token', async (req, res) => {
+  const { token } = req.params;
+  const { password } = req.body;
+  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  const user = await User.findById(decoded.id);
+  if (!user) return res.status(400).json({ message: 'User not found' });
+  user.password = password;
+  await user.save();
+  res.json({ message: 'Password reset successfully' });
 });
 
 

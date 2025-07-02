@@ -47,6 +47,7 @@ const Navbar = () => {
         });
         if (res.status === 200) {
           setUser(res.data);
+          console.log(res.data);
         } else {
           setUser(null);
         }
@@ -115,7 +116,7 @@ const Navbar = () => {
             onClick={() => setShowDropdown(!showDropdown)}
           >
             <img
-              src="https://png.pngtree.com/png-clipart/20230927/original/pngtree-man-avatar-image-for-profile-png-image_13001882.png"
+              src={user && user.image && user.image.url ? user.image.url : 'https://i.pravatar.cc/100?u=default'}
               alt="Profile"
               className="w-14 h-14 rounded-full"
             />

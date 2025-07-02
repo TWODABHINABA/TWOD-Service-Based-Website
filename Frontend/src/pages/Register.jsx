@@ -41,6 +41,7 @@ const RegisterPage = () => {
     try {
       setLoading(true);
       const response = await api.get(`/services/${id}`);
+      
       setService(response.data);
       setError(null);
     } catch (err) {
@@ -119,9 +120,25 @@ const RegisterPage = () => {
             <h2 className="text-5xl font-bold mb-3 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">
               {service.name}
             </h2>
-            <p className="text-gray-500 dark:text-gray-400 text-lg max-w-3xl mx-auto">
-              {service.description}
-            </p>
+            {service.offerDetails.map((od, index) => (
+              <div
+                key={index}
+                className="mb-6 max-w-xl mx-auto bg-white/20 dark:bg-black/30 rounded-2xl shadow-lg border border-blue-400/30 p-6 flex flex-col items-center"
+              >
+                <div className="flex items-center gap-4 mb-2">
+                  <h3 className="text-2xl font-bold text-blue-600 dark:text-blue-300">{od.description.heading}</h3>
+                  <span className="ml-2 px-4 py-1 bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 rounded-full text-lg font-semibold shadow">
+                    ${od.price}
+                  </span>
+                </div>
+                <ul className="list-disc list-inside text-gray-700 dark:text-gray-200 text-lg w-full mt-2 pl-4">
+                  {od.description.features.map((feature, i) => (
+                    <li key={i} className="mb-1">{feature}</li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+            
           </motion.div>
         )}
 
