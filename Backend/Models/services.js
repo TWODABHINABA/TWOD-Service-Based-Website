@@ -2,30 +2,39 @@ const { text } = require('body-parser');
 const mongoose = require('mongoose');
 
 const serviceSchema = new mongoose.Schema({
-    icon: {
-        type: String,
-        
+    image: {
+        url: String,
+        filename: String
     },
     name: {
         type: String,
         required: true,
         trim: true
     },
-    description: {
-        type: String,
-        required: true,
-        trim: true
-    },
-    price: {
-        type: Number,
-        required: true
-    },
+    offerDetails: [
+        {
+            price: {
+                type: Number,
+                required: true,
+            },
+            description: {
+                heading: {
+                    type: String,
+                    required: true,
+                },
+                features: {
+                    type: [String],
+                    required: true,
+                }
+            }
+        }
+    ],
     feedback: [{
         name: {
             type: String,
             required: true
         },
-        stars:  {
+        stars: {
             type: Number,
             required: true,
             min: 1,

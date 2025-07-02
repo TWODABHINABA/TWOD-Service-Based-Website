@@ -54,7 +54,9 @@ const ServicesPage = () => {
                 transition={{ type: "spring", stiffness: 100, damping: 10, delay: index * 0.2 }}
                 whileHover={{ scale: 1.03 }}
               >
-                <div className="text-5xl mb-4">{service.icon || "✨"}</div>
+                {service.image && (
+                  <img src={service.image.url} alt={service.name} className="object-cover w-full h-40 mb-4" />
+                )}
                 <h3 className="font-semibold text-xl text-red-700 mb-2">{service.name}</h3>
                 <p className="text-sm text-gray-300 dark:text-gray-400 mb-10">{service.description}</p>
 

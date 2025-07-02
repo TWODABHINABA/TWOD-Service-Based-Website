@@ -5,13 +5,21 @@ import api from '../../components/user-management/api';
 const AddService = () => {
   const [serviceData, setServiceData] = useState({
     name: '',
-    description: '',
-    icon: '',
-    price: '',
+    image: '',
+    offerDetails: [
+      {
+        price: '',
+        description: {
+          heading: '',
+          features: '', // comma-separated string for input
+        },
+      },
+    ],
   });
 
   const [serviceList, setServiceList] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [editingServiceId, setEditingServiceId] = useState(null);
 
 const token = localStorage.getItem('token');
   const [isAdmin, setIsAdmin] = useState(false);
@@ -62,25 +70,107 @@ const token = localStorage.getItem('token');
   
 
   const handleChange = (e) => {
-    setServiceData({ ...serviceData, [e.target.name]: e.target.value });
+    const { name, value, type, checked, files } = e.target;
+    setServiceData({
+      ...serviceData,
+      [name]: type === 'checkbox' ? checked : type === 'file' ? files[0] : value,
+      offerDetails: serviceData.offerDetails.map((od) => ({
+        ...od,
+        [name]: type === 'checkbox' ? checked : type === 'file' ? files[0] : value,
+      })),
+    });
+  };
+
+  const handleOfferDetailChange = (index, field, value, subfield) => {
+    const updatedOfferDetails = [...serviceData.offerDetails];
+    if (subfield) {
+      updatedOfferDetails[index].description[subfield] = value;
+    } else {
+      updatedOfferDetails[index][field] = value;
+    }
+    setServiceData({ ...serviceData, offerDetails: updatedOfferDetails });
+  };
+
+  const addOfferDetail = () => {
+    setServiceData({
+      ...serviceData,
+      offerDetails: [
+        ...serviceData.offerDetails,
+        { price: '', description: { heading: '', features: '' } },
+      ],
+    });
+  };
+
+  const removeOfferDetail = (index) => {
+    const updatedOfferDetails = serviceData.offerDetails.filter((_, i) => i !== index);
+    setServiceData({ ...serviceData, offerDetails: updatedOfferDetails });
+  };
+
+  
+
+  const handleEdit = (service) => {
+    setEditingServiceId(service._id);
+    setServiceData({
+      name: service.name || '',
+      image: '', // image upload is handled separately; keep empty unless user uploads new
+      offerDetails: service.offerDetails.map((od) => ({
+        price: od.price,
+        description: {
+          heading: od.description.heading,
+          features: Array.isArray(od.description.features)
+            ? od.description.features.join(', ')
+            : od.description.features || '',
+        },
+      })),
+    });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       setLoading(true);
-      await api.post('/admin/newService', serviceData);
-      alert('Service added successfully!');
+      const preparedData = {
+        name: serviceData.name,
+        offerDetails: serviceData.offerDetails.map((od) => ({
+          price: Number(od.price),
+          description: {
+            heading: od.description.heading,
+            features: od.description.features
+              .split(',')
+              .map((f) => f.trim())
+              .filter((f) => f),
+          },
+        })),
+        image: serviceData.image,
+      };
+      if (editingServiceId) {
+        await api.patch(`/admin/services/${editingServiceId}`, preparedData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+        alert('Service updated successfully!');
+      } else {
+        await api.post('/admin/newService', preparedData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+        alert('Service added successfully!');
+      }
       setServiceData({
         name: '',
-        description: '',
-        icon: '',
-        price: '',
+        offerDetails: [
+          { price: '', description: { heading: '', features: '' } },
+        ],
       });
+      setEditingServiceId(null);
       fetchServices();
     } catch (err) {
-      alert('Failed to add service.');
-      console.error('Error adding service:', err);
+      alert(editingServiceId ? 'Failed to update service.' : 'Failed to add service.');
+      console.error('Error saving service:', err);
     } finally {
       setLoading(false);
     }
@@ -101,7 +191,7 @@ const token = localStorage.getItem('token');
     <div className="max-w-6xl mx-auto pt-32 px-4 text-white">
       <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 shadow-xl border border-white/20">
         <h2 className="text-3xl font-bold mb-6 text-center">Add New Service</h2>
-        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-6">
           <div className="col-span-1">
             <label className="block mb-2 font-semibold">Service Name</label>
             <input
@@ -113,53 +203,80 @@ const token = localStorage.getItem('token');
               required
             />
           </div>
-
           <div className="col-span-1">
-            <label className="block mb-2 font-semibold">Icon (Emoji)</label>
+            <label className="block mb-2 font-semibold">Service Image</label>
             <input
-              type="text"
-              name="icon"
-              value={serviceData.icon}
+              type="file"
+              name="image"
+              accept="image/*"
               onChange={handleChange}
-              className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/30 outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="e.g. 🌐"
-              required
+              className="w-full px-4 py-2 rounded-lg bg-white/10 border border-white/30 outline-none"
             />
+            
           </div>
-
           <div className="col-span-1">
-            <label className="block mb-2 font-semibold">Price</label>
-            <input
-              type="text"
-              name="price"
-              value={serviceData.price}
-              onChange={handleChange}
-              className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/30 outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="e.g. $99 or Starting at $49"
-              required
-            />
+            <label className="block mb-2 font-semibold">Offer Details</label>
+            {serviceData.offerDetails.map((offer, idx) => (
+              <div key={idx} className="mb-4 p-4 bg-white/5 rounded-lg border border-white/20">
+                <div className="flex gap-2 items-center mb-2">
+                  <span className="font-semibold">Offer {idx + 1}</span>
+                  {serviceData.offerDetails.length > 1 && (
+                    <button type="button" onClick={() => removeOfferDetail(idx)} className="text-red-500 ml-auto">Remove</button>
+                  )}
+                </div>
+                <input
+                  type="number"
+                  placeholder="Price"
+                  value={offer.price}
+                  onChange={(e) => handleOfferDetailChange(idx, 'price', e.target.value)}
+                  className="w-full mb-2 px-3 py-2 rounded bg-white/10 border border-white/30 outline-none"
+                  required
+                />
+                <input
+                  type="text"
+                  placeholder="Heading"
+                  value={offer.description.heading}
+                  onChange={(e) => handleOfferDetailChange(idx, 'description', e.target.value, 'heading')}
+                  className="w-full mb-2 px-3 py-2 rounded bg-white/10 border border-white/30 outline-none"
+                  required
+                />
+                <input
+                  type="text"
+                  placeholder="Features (comma separated)"
+                  value={offer.description.features}
+                  onChange={(e) => handleOfferDetailChange(idx, 'description', e.target.value, 'features')}
+                  className="w-full px-3 py-2 rounded bg-white/10 border border-white/30 outline-none"
+                  required
+                />
+              </div>
+            ))}
+            <button type="button" onClick={addOfferDetail} className="mt-2 px-4 py-2 bg-blue-500 text-white rounded">Add Offer</button>
           </div>
-
-          <div className="col-span-1 md:col-span-2">
-            <label className="block mb-2 font-semibold">Description</label>
-            <textarea
-              name="description"
-              value={serviceData.description}
-              onChange={handleChange}
-              className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/30 outline-none focus:ring-2 focus:ring-blue-500"
-              rows="4"
-              required
-            />
-          </div>
-
-          <div className="col-span-1 md:col-span-2 text-center">
+          <div className="col-span-1 text-center">
             <button
               type="submit"
               className="bg-blue-600 hover:bg-blue-700 transition duration-300 text-white py-3 px-8 rounded-lg text-lg font-semibold"
               disabled={loading}
             >
-              {loading ? 'Adding...' : 'Add Service'}
+              {loading ? (editingServiceId ? 'Updating...' : 'Adding...') : (editingServiceId ? 'Update Service' : 'Add Service')}
             </button>
+            {editingServiceId && (
+              <button
+                type="button"
+                className="ml-4 bg-gray-500 hover:bg-gray-600 transition duration-300 text-white py-3 px-8 rounded-lg text-lg font-semibold"
+                onClick={() => {
+                  setEditingServiceId(null);
+                  setServiceData({
+                    name: '',
+                    offerDetails: [
+                      { price: '', description: { heading: '', features: '' } },
+                    ],
+                  });
+                }}
+              >
+                Cancel
+              </button>
+            )}
           </div>
         </form>
       </div>
@@ -177,18 +294,41 @@ const token = localStorage.getItem('token');
                 key={service._id}
                 className="bg-white/10 backdrop-blur-lg border border-white/20 p-6 rounded-xl shadow-md relative"
               >
-                <div className="absolute top-4 right-4">
+                <div className="absolute top-4 right-4 flex gap-2">
                   <FiTrash2
                     className="text-red-500 hover:text-red-700 cursor-pointer"
                     size={22}
                     onClick={() => handleDelete(service._id)}
                     title="Delete Service"
                   />
+                  <button
+                    className="ml-2 text-blue-400 hover:text-blue-600 underline text-sm"
+                    onClick={() => handleEdit(service)}
+                    title="Edit Service"
+                    type="button"
+                  >
+                    Edit
+                  </button>
                 </div>
-                <div className="text-4xl mb-3">{service.icon}</div>
+                {service.image && service.image.url && (
+                  <img src={service.image.url} alt={service.name} className="h-24 w-full object-contain mb-2 rounded" />
+                )}
                 <h4 className="text-xl font-bold mb-2">{service.name}</h4>
-                <p className="font-semibold text-lg mb-2">{service.price}</p>
-                <p className="text-gray-300 text-sm">{service.description}</p>
+                {service.offerDetails && service.offerDetails.length > 0 && (
+                  <div className="mb-2">
+                    {service.offerDetails.map((od, i) => (
+                      <div key={i} className="mb-2 p-2 bg-white/5 rounded">
+                        <div className="font-semibold">Price: {od.price}</div>
+                        <div className="font-semibold">{od.description.heading}</div>
+                        <ul className="list-disc ml-5 text-sm text-gray-300">
+                          {od.description.features && od.description.features.map((f, j) => (
+                            <li key={j}>{f}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             ))}
           </div>

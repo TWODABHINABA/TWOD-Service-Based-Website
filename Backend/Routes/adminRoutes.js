@@ -158,9 +158,17 @@ router.post('/applications/:id/status', isAuthenticated, isAdmin, async (req, re
     }
 });
 
-router.post('/newService', isAuthenticated, isAdmin, async (req, res) => {
+router.post('/newService', isAuthenticated, isAdmin, upload.single('image'), async (req, res) => {
     try {
         const serviceData = req.body;
+        const image = req.file;
+        if (!image) {
+            return res.status(400).json({ message: 'Image is required' });
+        }
+        serviceData.image = {
+            url: image.path,
+            filename: image.filename
+        };
         console.log(serviceData);
         const newService = new Service(serviceData);
         await newService.save();
@@ -181,5 +189,25 @@ router.delete('/services/:id', isAuthenticated, isAdmin, async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 });
+
+router.patch('/services/:id', isAuthenticated, isAdmin, upload.single('image'), async (req, res) => {
+    try {
+        const serviceId = req.params.id;
+        const serviceData = req.body;
+        const image = req.file;
+        if (!image) {
+            return res.status(400).json({ message: 'Image is required' });
+        }
+        serviceData.image = {
+            url: image.path,
+            filename: image.filename
+        };
+        await Service.findByIdAndUpdate(serviceId, serviceData);
+        res.status(200).json({ message: 'Service updated successfully' });
+    } catch (error) {
+        console.error('Error updating service:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+}); 
 
 module.exports = router;

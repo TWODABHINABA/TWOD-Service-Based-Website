@@ -49,7 +49,7 @@ passport.use(
               name: profile.displayName,
               email,
               googleId: profile.id,
-              profilePicture: profile.photos[0].value,
+              image: { url: profile.photos[0].value, filename: profile.photos[0].filename },
               birthday: defaultBirthday,
             });
             await user.save();
@@ -117,7 +117,7 @@ if (!email) {
               name,
               email,
               githubId: profile.id,
-              profilePicture: profile.photos[0].value,
+              image: { url: profile.photos[0].value, filename: profile.photos[0].filename },
               birthday: defaultBirthday,
             });
             await user.save();

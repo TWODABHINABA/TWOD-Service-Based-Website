@@ -22,6 +22,7 @@ import AddService from './pages/Admin/AddService';
 import Register from './pages/Register';
 import {Toaster} from "react-hot-toast"
 import AutoLogout from './AutoLogout';
+import ResetPassword from './pages/ResetPassword';
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -74,6 +75,7 @@ const App = () => {
           <Route path="/team-member-list" element={<TeamMemberList />} />
           <Route path="/client-requests" element={<ClientRequests />} />
           <Route path="/add-service" element={<AddService />} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
         </Routes>
         <Footer />
       </div>

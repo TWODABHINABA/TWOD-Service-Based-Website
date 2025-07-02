@@ -9,9 +9,14 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
+  const [image, setImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+  const [showForgot, setShowForgot] = useState(false);
+  const [forgotEmail, setForgotEmail] = useState('');
 
   const handleGoogleLogin = () => {
-    window.location.href = 'https://twod-service-based-website-backend.onrender.com/auth/google';
+    // window.location.href = 'https://twod-service-based-website-backend.onrender.com/auth/google';
+    window.location.href = 'http://localhost:6001/auth/google';
   };
 
   const handleGithubLogin = () => {
@@ -21,18 +26,22 @@ const Login = () => {
   const handleSignUp = async (event) => {
     event.preventDefault();
     try {
-      const res = await api.post('/api/signup', {
-        name,
-        email,
-        password,
+      const formData = new FormData();
+      formData.append('name', name);
+      formData.append('email', email);
+      formData.append('password', password);
+      if (image) formData.append('image', image);
+
+      const res = await api.post('/api/signup', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
       });
 
       localStorage.setItem('token', res.data.token);
-      toast.success("Register sucessfull")
+      toast.success("Register successful");
       setState("Login");
     } catch (err) {
-      const error=err.response?.data?.message || 'Signup failed'
-      toast.error(error)
+      const error = err.response?.data?.message || 'Signup failed';
+      toast.error(error);
     }
   };
 
@@ -101,6 +110,33 @@ const Login = () => {
             className="border border-zinc-500 rounded w-full p-2 mt-1"
           />
         </div>
+        {state !== 'Sign Up' && !showForgot && (
+          <div className="w-full text-right">
+            <span
+              className="text-blue-600 underline cursor-pointer text-sm"
+              onClick={() => setShowForgot(true)}
+            >
+              Forgot Password?
+            </span>
+          </div>
+        )}
+        {state === 'Sign Up' && (
+        <div className="w-full">
+          <p>Profile Image</p>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={e => {
+              setImage(e.target.files[0]);
+              setImagePreview(URL.createObjectURL(e.target.files[0]));
+            }}
+            className="border border-zinc-500 rounded w-full p-2 mt-1"
+          />
+          {imagePreview && (
+            <img src={imagePreview} alt="Preview" className="mt-2 h-16 w-16 object-cover rounded-full" />
+          )}
+        </div>
+        )}
 
         <button
           type="submit"
@@ -145,6 +181,42 @@ const Login = () => {
               Click Here
             </span>
           </p>
+        )}
+
+        {showForgot && (
+          <div className="w-full flex flex-col gap-2">
+            <p>Enter your email to reset password</p>
+            <input
+              type="email"
+              value={forgotEmail}
+              onChange={e => setForgotEmail(e.target.value)}
+              className="border border-zinc-500 rounded w-full p-2 mt-1"
+              placeholder="Email"
+            />
+            <button
+              type="button"
+              className="bg-blue-600 text-white w-full rounded-md text-base py-2"
+              onClick={async () => {
+                try {
+                  await api.post('/forgot-password', { email: forgotEmail });
+                  toast.success('Password reset link sent to your email!');
+                  setShowForgot(false);
+                  setForgotEmail('');
+                } catch (err) {
+                  toast.error(err.response?.data?.message || 'Failed to send reset link');
+                }
+              }}
+            >
+              Send Reset Link
+            </button>
+            <button
+              type="button"
+              className="text-gray-500 underline text-sm mt-1"
+              onClick={() => setShowForgot(false)}
+            >
+              Back to Login
+            </button>
+          </div>
         )}
       </div>
     </form>
