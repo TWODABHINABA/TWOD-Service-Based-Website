@@ -88,7 +88,7 @@ const AboutUs = () => {
                   <h3 className="text-xl font-semibold text-black dark:text-white">{member.name}</h3>
                   <p className="text-sm text-gray-800 dark:text-gray-300 mt-1">{member.skill}</p>
                   <a
-                    href={`https://linkedin.com/in/${member.linkedinId}`}
+                    href={`${member.linkedinId}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="mt-4 text-sky-700 dark:text-sky-400 hover:text-sky-500 dark:hover:text-sky-300 transition-transform hover:scale-110"
