@@ -65,7 +65,7 @@ const JobApplications = () => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto pt-24 px-4 text-white">
+    <div className="max-w-6xl mx-auto pt-24 px-4 text-white h-screen">
       <h2 className="text-3xl font-bold mb-8 text-center">Job Applications</h2>
 
       {loading ? (
