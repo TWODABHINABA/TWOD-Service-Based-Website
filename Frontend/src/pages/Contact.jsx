@@ -94,35 +94,12 @@ const Contact = () => {
                   required
                 ></textarea>
 
-                <button disabled={isSubmitting} className="button" type="submit">
-                  <div className="outline bg-purple-500 dark:bg-gray-600"></div>
-                  {!submitted ? (
-                    <div className="state state--default text-white ">
-                      <div className="icon"></div>
-                      <p>
-                        {"Send Message".split("").map((char, i) => (
-                          <span key={i} style={{ "--i": i }}>{char}</span>
-                        ))}
-                      </p>
-                    </div>
-                  ) : (
-                    <div className="state state--sent">
-                      <div className="icon">
-                        <svg stroke="black" strokeWidth="0.5px" width="1.2em" height="1.2em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <g style={{ filter: "url(#shadow)" }}>
-                            <path d="M12 22.75C6.07 22.75 1.25 17.93 1.25 12C1.25 6.07 6.07 1.25 12 1.25C17.93 1.25 22.75 6.07 22.75 12C22.75 17.93 17.93 22.75 12 22.75ZM12 2.75C6.9 2.75 2.75 6.9 2.75 12C2.75 17.1 6.9 21.25 12 21.25C17.1 21.25 21.25 17.1 21.25 12C21.25 6.9 17.1 2.75 12 2.75Z" fill="currentColor"></path>
-                            <path d="M10.5795 15.5801C10.3795 15.5801 10.1895 15.5001 10.0495 15.3601L7.21945 12.5301C6.92945 12.2401 6.92945 11.7601 7.21945 11.4701C7.50945 11.1801 7.98945 11.1801 8.27945 11.4701L10.5795 13.7701L15.7195 8.6301C16.0095 8.3401 16.4895 8.3401 16.7795 8.6301C17.0695 8.9201 17.0695 9.4001 16.7795 9.6901L11.1095 15.3601C10.9695 15.5001 10.7795 15.5801 10.5795 15.5801Z" fill="currentColor"></path>
-                          </g>
-                        </svg>
-                      </div>
-                      <p>
-                        {"Sent!".split("").map((char, i) => (
-                          <span key={i} style={{ "--i": i }}>{char}</span>
-                        ))}
-                      </p>
-                    </div>
-                  )}
-                </button>
+                
+                  <button disabled={isSubmitting} className="button" type="submit" class="w-40 h-10 text-white rounded-md px-6 py-2 font-medium bg-gradient-to-t from-purple-700 to-purple-700 cursor-pointer transition-all duration-300 relative inline-block shadow-inner shadow-white/50 hover:shadow-[4px_4px_6px_rgba(255,255,255,0.5),-4px_-4px_6px_rgba(116,125,136,0.5),inset_-4px_-4px_6px_rgba(255,255,255,0.2),inset_4px_4px_6px_rgba(0,0,0,0.4)] outline-none text-[15px]">
+                    Send Message
+                  </button>
+
+                
               </form>
             )}
           </div>
