@@ -84,7 +84,7 @@ const AboutUs = () => {
                       "https://png.pngtree.com/png-clipart/20230927/original/pngtree-man-avatar-image-for-profile-png-image_13001882.png"
                     }
                     alt={member.name}
-                    className="w-28 h-28 rounded-full object-cover border-4 border-purple-500 mb-4"
+                    className="w-28 h-28 rounded-full object-cover border-4 border-grey-500 mb-4"
                   />
                   <h3 className="text-xl font-semibold text-black dark:text-white">{member.name}</h3>
                   <p className="text-sm text-gray-800 dark:text-gray-300 mt-1">{member.skill}</p>
