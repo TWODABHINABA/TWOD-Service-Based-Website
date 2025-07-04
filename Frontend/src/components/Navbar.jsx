@@ -1,16 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import '../App.css';
-import api from '../components/user-management/api';
 import Toggle from './Toggle';
 
-const Navbar = () => {
+const Navbar = ({ user, setUser }) => {
   const navigate = useNavigate();
   const [showDropdown, setShowDropdown] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
-  const [user, setUser] = useState(null);
 
-  const dropdownRef = useRef(null); // 👈 Ref for dropdown
+  const dropdownRef = useRef(null);
 
   // Dark mode toggle state
   const [isDarkMode, setIsDarkMode] = useState(() => {
@@ -30,36 +28,13 @@ const Navbar = () => {
     }
   }, [isDarkMode]);
 
-  const isLoggedIn = !!localStorage.getItem('token');
-  const handleLogout = () => {
+  const isLoggedIn = !!user;
+
+   const handleLogout = () => {
     localStorage.removeItem('token');
+    setUser(null);  
     navigate('/login');
   };
-
-  // Fetch user info
-  useEffect(() => {
-    const fetchUser = async () => {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        setUser(null);
-        return;
-      }
-      try {
-        const res = await api.get('/user/me', {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        if (res.status === 200) {
-          setUser(res.data);
-        } else {
-          setUser(null);
-        }
-      } catch (err) {
-        setUser(null);
-        console.error('Failed to fetch user:', err);
-      }
-    };
-    fetchUser();
-  }, []);
 
   // 👇 Close dropdown when clicking outside
   useEffect(() => {
@@ -205,7 +180,7 @@ const Navbar = () => {
             {isLoggedIn ? (
               <>
                 {user?.role === 'admin' && (
-                  <NavLink onClick={() => setShowMobileMenu(false)} to="/client-requests">Admin Dashboard</NavLink>
+                  <NavLink onClick={() => setShowMobileMenu(false)} to="/admin/client-requests">Admin Dashboard</NavLink>
                 )}
                 <NavLink onClick={() => setShowMobileMenu(false)} to="/myprofile">My Profile</NavLink>
                 <p

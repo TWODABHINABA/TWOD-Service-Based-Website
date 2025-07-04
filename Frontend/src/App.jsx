@@ -15,7 +15,6 @@ import Register from './pages/Register';
 import ResetPassword from './pages/ResetPassword';
 import Footer from './components/Footer';
 
-
 import AdminLayout from './pages/Admin/AdminLayout';
 
 const App = () => {
@@ -49,12 +48,13 @@ const App = () => {
   return (
     <div className="bg-[#F8F9FD] min-h-screen">
       {isAuthenticated && <AutoLogout />}
-      <Navbar user={user} />
+      <Navbar user={user} setUser={setUser} />
 
       <Routes>
-        
+        {/* Public Routes */}
         <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
+        
+        <Route path="/login" element={<Login setUser={setUser} />} />
         <Route path="/aboutus" element={<AboutUs />} />
         <Route path="/services" element={<Services />} />
         <Route path="/contact" element={<Contact />} />
@@ -62,7 +62,6 @@ const App = () => {
         <Route path="/register/:id" element={<Register />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
 
-        
         {isAdmin ? (
           <Route path="/admin/*" element={<AdminLayout />} />
         ) : (
@@ -71,11 +70,9 @@ const App = () => {
           )
         )}
 
-        
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
 
-      
       {!isAdminDashboard && <Footer />}
     </div>
   );
