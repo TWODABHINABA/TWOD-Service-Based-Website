@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import '../App.css';
-import api from '../components/user-management/api';
 import Toggle from './Toggle';
 
-const Navbar = () => {
+const Navbar = ({ user, setUser }) => {
   const navigate = useNavigate();
   const [showDropdown, setShowDropdown] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
-  const [user, setUser] = useState(null);
+
+  const dropdownRef = useRef(null);
 
   // Dark mode toggle state
   const [isDarkMode, setIsDarkMode] = useState(() => {
@@ -28,35 +28,23 @@ const Navbar = () => {
     }
   }, [isDarkMode]);
 
-  const isLoggedIn = !!localStorage.getItem('token');
-  const handleLogout = () => {
+  const isLoggedIn = !!user;
+
+   const handleLogout = () => {
     localStorage.removeItem('token');
+    setUser(null);  
     navigate('/login');
   };
 
+  // 👇 Close dropdown when clicking outside
   useEffect(() => {
-    const fetchUser = async () => {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        setUser(null);
-        return;
-      }
-      try {
-        const res = await api.get('/user/me', {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        if (res.status === 200) {
-          setUser(res.data);
-          console.log(res.data);
-        } else {
-          setUser(null);
-        }
-      } catch (err) {
-        setUser(null);
-        console.error('Failed to fetch user:', err);
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false);
       }
     };
-    fetchUser();
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   return (
@@ -76,9 +64,7 @@ const Navbar = () => {
     >
       {/* Logo */}
       <div className="relative flex items-center">
-        {/* Glow behind logo for visibility */}
         <div className="absolute inset-0 rounded-xl blur-2xl opacity-60 bg-white/20 dark:bg-white/10 z-0"></div>
-
         <img
           src="https://i0.wp.com/thewallofdreams.com/wp-content/uploads/2025/03/logo_twod-removebg-preview.png?w=846&ssl=1"
           alt="TWOD Logo"
@@ -89,18 +75,10 @@ const Navbar = () => {
 
       {/* Desktop Nav Links */}
       <ul className="hidden md:flex items-center gap-6 text-sm font-medium">
-        <NavLink to="/" className="hover:text-gray-400">
-          HOME
-        </NavLink>
-        <NavLink to="/aboutus" className="hover:text-gray-400">
-          ABOUT US
-        </NavLink>
-        <NavLink to="/services" className="hover:text-gray-400">
-          SERVICES
-        </NavLink>
-        <NavLink to="/contact" className="hover:text-gray-400">
-          CONTACT US
-        </NavLink>
+        <NavLink to="/" className="hover:text-gray-400">HOME</NavLink>
+        <NavLink to="/aboutus" className="hover:text-gray-400">ABOUT US</NavLink>
+        <NavLink to="/services" className="hover:text-gray-400">SERVICES</NavLink>
+        <NavLink to="/contact" className="hover:text-gray-400">CONTACT US</NavLink>
       </ul>
 
       {/* Dark Mode Toggle (Desktop) */}
@@ -109,32 +87,31 @@ const Navbar = () => {
       </div>
 
       {/* User Actions (Desktop) */}
-      <div className="relative hidden md:block">
+      <div className="relative hidden md:block" ref={dropdownRef}>
         {isLoggedIn ? (
           <div
             className="flex items-center gap-2 cursor-pointer"
             onClick={() => setShowDropdown(!showDropdown)}
           >
             <img
-              src={user && user.image && user.image.url ? user.image.url : 'https://i.pravatar.cc/100?u=default'}
+              src={user?.image?.url || 'https://i.pravatar.cc/100?u=default'}
               alt="Profile"
               className="w-14 h-14 rounded-full"
             />
             <span>▼</span>
             {showDropdown && (
               <div className="absolute right-0 mt-2 bg-white text-black shadow-md rounded-md p-3 z-10 min-w-[140px]">
-                {user && user.role === 'admin' && (
+                {user?.role === 'admin' && (
                   <p
                     onClick={() => {
-                      navigate('/admin');
+                      navigate('/admin/client-requests');
                       setShowDropdown(false);
                     }}
-                    className="cursor-pointer hover:text-gray-600 mb-2 font-semibold text-black"
+                    className="cursor-pointer hover:text-gray-600 mb-2 font-semibold"
                   >
                     Admin Dashboard
                   </p>
                 )}
-
                 <p
                   onClick={() => {
                     navigate('/myprofile');
@@ -160,7 +137,7 @@ const Navbar = () => {
         )}
       </div>
 
-      {/* Mobile View: Dark Mode Toggle + Menu */}
+      {/* Mobile View: Toggle + Menu */}
       <div className="md:hidden flex items-center gap-4">
         <button
           onClick={() => setIsDarkMode(!isDarkMode)}
@@ -169,7 +146,6 @@ const Navbar = () => {
         >
           {isDarkMode ? '☀' : '🌙'}
         </button>
-
         <button onClick={() => setShowMobileMenu(true)}>
           <img
             src="https://img.icons8.com/ios-filled/24/menu--v1.png"
@@ -197,24 +173,16 @@ const Navbar = () => {
             </button>
           </div>
           <ul className="flex flex-col gap-4 text-base font-medium">
-            <NavLink onClick={() => setShowMobileMenu(false)} to="/">
-              HOME
-            </NavLink>
-            <NavLink onClick={() => setShowMobileMenu(false)} to="/aboutus">
-              ABOUT US
-            </NavLink>
-            <NavLink onClick={() => setShowMobileMenu(false)} to="/services">
-              SERVICES
-            </NavLink>
-            <NavLink onClick={() => setShowMobileMenu(false)} to="/contact">
-              CONTACT US
-            </NavLink>
+            <NavLink onClick={() => setShowMobileMenu(false)} to="/">HOME</NavLink>
+            <NavLink onClick={() => setShowMobileMenu(false)} to="/aboutus">ABOUT US</NavLink>
+            <NavLink onClick={() => setShowMobileMenu(false)} to="/services">SERVICES</NavLink>
+            <NavLink onClick={() => setShowMobileMenu(false)} to="/contact">CONTACT US</NavLink>
             {isLoggedIn ? (
               <>
-                <NavLink onClick={() => setShowMobileMenu(false)} to="/admin" className={`text-black`}  >Admin Dashboard</NavLink>
-                <NavLink onClick={() => setShowMobileMenu(false)} to="/myprofile">
-                  My Profile
-                </NavLink>
+                {user?.role === 'admin' && (
+                  <NavLink onClick={() => setShowMobileMenu(false)} to="/admin/client-requests">Admin Dashboard</NavLink>
+                )}
+                <NavLink onClick={() => setShowMobileMenu(false)} to="/myprofile">My Profile</NavLink>
                 <p
                   className="cursor-pointer hover:text-primary"
                   onClick={() => {

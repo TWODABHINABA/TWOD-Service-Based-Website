@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../components/user-management/api';
 import toast from 'react-hot-toast';
 
-const Login = () => {
+const Login = ({ setUser }) => {
   const navigate = useNavigate();
   const [state, setState] = useState('Login');
   const [email, setEmail] = useState('');
@@ -33,12 +33,12 @@ const Login = () => {
       if (image) formData.append('image', image);
 
       const res = await api.post('/api/signup', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
+        headers: { 'Content-Type': 'multipart/form-data' },
       });
 
       localStorage.setItem('token', res.data.token);
-      toast.success("Register successful");
-      setState("Login");
+      toast.success('Register successful');
+      setState('Login');
     } catch (err) {
       const error = err.response?.data?.message || 'Signup failed';
       toast.error(error);
@@ -54,19 +54,20 @@ const Login = () => {
       });
 
       localStorage.setItem('token', res.data.token);
-      toast.success("Login sucessfull")
+      toast.success('Login successful');
+
+      // Fetch logged-in user info immediately after login
+      const userRes = await api.get('/user/me', {
+        headers: { Authorization: `Bearer ${res.data.token}` },
+      });
+
+      setUser(userRes.data); // Update global user state in App
+
       navigate('/');
     } catch (err) {
       alert(err.response?.data?.message || 'Login failed');
     }
   };
-
-  // useEffect(() => {
-  //   const token = localStorage.getItem('dummyToken');
-  //   if (token) {
-  //     navigate('/');
-  //   }
-  // }, []);
 
   return (
     <form className="min-h-screen flex items-center justify-center pt-24 px-4">
@@ -110,6 +111,7 @@ const Login = () => {
             className="border border-zinc-500 rounded w-full p-2 mt-1"
           />
         </div>
+
         {state !== 'Sign Up' && !showForgot && (
           <div className="w-full text-right">
             <span
@@ -120,22 +122,27 @@ const Login = () => {
             </span>
           </div>
         )}
+
         {state === 'Sign Up' && (
-        <div className="w-full">
-          <p>Profile Image</p>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={e => {
-              setImage(e.target.files[0]);
-              setImagePreview(URL.createObjectURL(e.target.files[0]));
-            }}
-            className="border border-zinc-500 rounded w-full p-2 mt-1"
-          />
-          {imagePreview && (
-            <img src={imagePreview} alt="Preview" className="mt-2 h-16 w-16 object-cover rounded-full" />
-          )}
-        </div>
+          <div className="w-full">
+            <p>Profile Image</p>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                setImage(e.target.files[0]);
+                setImagePreview(URL.createObjectURL(e.target.files[0]));
+              }}
+              className="border border-zinc-500 rounded w-full p-2 mt-1"
+            />
+            {imagePreview && (
+              <img
+                src={imagePreview}
+                alt="Preview"
+                className="mt-2 h-16 w-16 object-cover rounded-full"
+              />
+            )}
+          </div>
         )}
 
         <button
@@ -189,7 +196,7 @@ const Login = () => {
             <input
               type="email"
               value={forgotEmail}
-              onChange={e => setForgotEmail(e.target.value)}
+              onChange={(e) => setForgotEmail(e.target.value)}
               className="border border-zinc-500 rounded w-full p-2 mt-1"
               placeholder="Email"
             />

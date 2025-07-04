@@ -3,76 +3,68 @@ import { NavLink } from 'react-router-dom';
 
 const Sidebar = () => {
   return (
-    <div className="min-h-screen bg-transparent border-r w-full sm:w-64 flex  pt-24 flex-col ">
-      <ul className="text-white mt-5">
-      <NavLink
-          to="/client-requests"
+    <div className="fixed top-0 left-0 min-h-screen w-64 pt-10 bg-gray-100 border-r border-gray-300 flex flex-col dark:bg-black dark:border-gray-700">
+      <ul className="mt-20 pt-15">
+        <NavLink
+          to="/admin/client-requests"
           className={({ isActive }) =>
             `block py-3.5 px-6 cursor-pointer ${
-              isActive ? 'bg-[#F2F3FF] border-r-4 border-primary font-semibold' : ''
+              isActive
+                ? 'bg-[#F2F3FF] border-r-4 border-blue-600 font-semibold text-black dark:text-black'
+                : 'text-black dark:text-white'
             }`
           }
         >
           Client Requests
         </NavLink>
-        {/* add a service */}
         <NavLink
-          to="/add-service"
+          to="/admin/add-service"
           className={({ isActive }) =>
             `block py-3.5 px-6 cursor-pointer ${
-              isActive ? 'bg-[#F2F3FF] border-r-4 border-primary font-semibold' : ''
+              isActive
+                ? 'bg-[#F2F3FF] border-r-4 border-blue-600 font-semibold text-black dark:text-black'
+                : 'text-black dark:text-white'
             }`
           }
         >
           Add Service
         </NavLink>
-
         <NavLink
-          to="/add-job"
+          to="/admin/add-job"
           className={({ isActive }) =>
             `block py-3.5 px-6 cursor-pointer ${
-              isActive ? 'bg-[#F2F3FF] border-r-4 border-primary font-semibold' : ''
+              isActive
+                ? 'bg-[#F2F3FF] border-r-4 border-blue-600 font-semibold text-black dark:text-black'
+                : 'text-black dark:text-white'
             }`
           }
         >
           Add Job
         </NavLink>
-
         <NavLink
-          to="/add-team-member"
+          to="/admin/add-team-member"
           className={({ isActive }) =>
             `block py-3.5 px-6 cursor-pointer ${
-              isActive ? 'bg-[#ededf2] border-r-4 border-primary font-semibold' : ''
+              isActive
+                ? 'bg-[#ededf2] border-r-4 border-blue-600 font-semibold text-black dark:text-black'
+                : 'text-black dark:text-white'
             }`
           }
         >
           Add Team Member
         </NavLink>
-
         <NavLink
-          to="/job-applications"
+          to="/admin/job-applications"
           className={({ isActive }) =>
             `block py-3.5 px-6 cursor-pointer ${
-              isActive ? 'bg-[#F2F3FF] border-r-4 border-primary font-semibold' : ''
+              isActive
+                ? 'bg-[#F2F3FF] border-r-4 border-blue-600 font-semibold text-black dark:text-black'
+                : 'text-black dark:text-white'
             }`
           }
         >
           Job Applications
         </NavLink>
-
-        {/* <NavLink
-          to="/team-member-list"
-          className={({ isActive }) =>
-            `block py-3.5 px-6 cursor-pointer ${
-              isActive ? 'bg-[#F2F3FF] border-r-4 border-primary font-semibold' : ''
-            }`
-          }
-        >
-          Team Member List
-        </NavLink> */}
-
-        
-
       </ul>
     </div>
   );
