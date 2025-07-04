@@ -1,3 +1,4 @@
+
 'use client';
 import React, { useState, useEffect } from "react";
 import { FaLinkedin } from "react-icons/fa";
@@ -26,7 +27,7 @@ const AboutUs = () => {
 
   return (
     <StarsBackground className="mt-20">
-      <div className="text-white min-h-screen p-6 md:p-12 relative z-10">
+      <div className="min-h-screen p-6 md:p-12 relative z-10">
 
         {/* About Section */}
         <About />
@@ -49,7 +50,7 @@ const AboutUs = () => {
             ].map((item, i) => (
               <div
                 key={i}
-                className="rounded-2xl border border-gray-200 dark:border-white/10 bg-white/80 dark:bg-white/5 backdrop-blur-lg shadow-xl p-8 hover:shadow-2xl transition-all duration-500"
+                className="rounded-2xl border border-gray-300 dark:border-white/20 bg-white dark:bg-gray-900 shadow-2xl dark:shadow-lg p-8 hover:shadow-2xl transition-all duration-500"
               >
                 <h3 className="text-2xl font-semibold text-black dark:text-white mb-4">
                   {item.title}
@@ -75,7 +76,7 @@ const AboutUs = () => {
               {teamMembers.map((member, index) => (
                 <div
                   key={index}
-                  className="rounded-3xl p-6 bg-white/90 dark:bg-white/5 backdrop-blur-md shadow-md hover:shadow-xl transition-transform transform hover:-translate-y-2 border border-white/10 flex flex-col items-center text-center"
+                  className="rounded-3xl p-6 bg-white dark:bg-gray-900 shadow-2xl dark:shadow-lg border border-gray-300 dark:border-white/20 hover:shadow-2xl transition-transform transform hover:-translate-y-2 flex flex-col items-center text-center"
                 >
                   <img
                     src={
@@ -83,7 +84,7 @@ const AboutUs = () => {
                       "https://png.pngtree.com/png-clipart/20230927/original/pngtree-man-avatar-image-for-profile-png-image_13001882.png"
                     }
                     alt={member.name}
-                    className="w-28 h-28 rounded-full object-cover border-4 border-secondary mb-4"
+                    className="w-28 h-28 rounded-full object-cover border-4 border-purple-500 mb-4"
                   />
                   <h3 className="text-xl font-semibold text-black dark:text-white">{member.name}</h3>
                   <p className="text-sm text-gray-800 dark:text-gray-300 mt-1">{member.skill}</p>
